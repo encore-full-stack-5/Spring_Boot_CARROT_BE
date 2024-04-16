@@ -1,0 +1,20 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.carrot_market.area.db.AreaMapper">
+
+    <select id="selectAreaById" resultType="com.example.carrot_market.area.domain.model.Area">
+        SELECT * FROM areas WHERE id = #{id}
+    </select>
+
+    <select id="selectAreasByLatLonAndRange" resultType="com.example.carrot_market.area.domain.model.Area">
+        SELECT * FROM areas
+        WHERE ST_Distance_Sphere(
+        geo_point,
+        ST_GeomFromText(CONCAT('POINT(', #{lon}, ' ', #{lat}, ')'))
+        ) &lt;= #{distance}
+    </select>
+    <insert id="insertAreaToUser">
+        INSERT INTO user_area (user_id, area_id, range_area, current_state)
+        VALUES
+        (#{userId}, #{areaId}, #{rangeArea}, #{isDefault})
+    </insert>
+</mapper>
