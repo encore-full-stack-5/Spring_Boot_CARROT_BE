@@ -40,10 +40,7 @@ public class UserServiceImpl implements UserService {
         );
 
         User user = makeUser(singUpRequestDto);
-        log.error(user.toString());
         userMapper.insertUser(user);
-        log.error(user.toString());
-        log.error(singUpRequestDto.getAreaId());
 
         areaService.addAreaToUser(
                 singUpRequestDto.getAreaId(),

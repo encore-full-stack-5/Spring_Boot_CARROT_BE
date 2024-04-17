@@ -1,7 +1,9 @@
 package com.example.carrot_market.area.domain.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
+@AllArgsConstructor
 @Data
 public class Area {
 

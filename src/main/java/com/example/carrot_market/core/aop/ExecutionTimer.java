@@ -2,6 +2,7 @@ package com.example.carrot_market.core.aop;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -14,12 +15,8 @@ import org.springframework.util.StopWatch;
 @Component
 public class ExecutionTimer {
 
-    // 조인포인트를 어노테이션으로 설정
-    @Pointcut("@annotation(com.example.carrot_market.core.aop.ExeTimer)")
-    private void timer(){};
-
     // 메서드 실행 전,후로 시간을 공유해야 하기 때문
-    @Around("timer()")
+    @Around("@within(com.example.carrot_market.core.aop.ExeTimer)")
     public void AssumeExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
 
         StopWatch stopWatch = new StopWatch();

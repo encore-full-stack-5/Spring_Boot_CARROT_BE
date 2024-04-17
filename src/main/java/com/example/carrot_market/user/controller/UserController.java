@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@ExeTimer
 @RestController
 @RequestMapping("api/v1/users")
 public class UserController {
@@ -22,7 +23,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    @ExeTimer
     @GetMapping("/aop_test")
     public String dbAccess() throws InterruptedException {
         Thread.sleep(1000);
