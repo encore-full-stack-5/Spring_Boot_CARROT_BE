@@ -17,19 +17,19 @@ public class ExecutionTimer {
 
     // 메서드 실행 전,후로 시간을 공유해야 하기 때문
     @Around("@within(com.example.carrot_market.core.aop.ExeTimer)")
-    public void AssumeExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object AssumeExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
 
         StopWatch stopWatch = new StopWatch();
 
         stopWatch.start();
-        joinPoint.proceed(); // 조인포인트의 메서드 실행
+        Object sign_up = joinPoint.proceed(); // 조인포인트의 메서드 실행
         stopWatch.stop();
 
         long totalTimeMillis = stopWatch.getTotalTimeMillis();
-
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         String methodName = signature.getMethod().getName();
 
-        log.info("실행 메서드: {}, 실행시간 = {}ms", methodName, totalTimeMillis);
+        log.info("시간 측정 Method Name : " + methodName + " / Total Time : " + totalTimeMillis + "ms");
+        return sign_up;
     }
 }

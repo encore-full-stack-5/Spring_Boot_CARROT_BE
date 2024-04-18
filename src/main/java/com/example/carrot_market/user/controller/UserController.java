@@ -1,6 +1,7 @@
 package com.example.carrot_market.user.controller;
 
 import com.example.carrot_market.core.BaseResponseEntity;
+import com.example.carrot_market.core.CommonError;
 import com.example.carrot_market.core.aop.ExeTimer;
 import com.example.carrot_market.user.domain.User;
 import com.example.carrot_market.user.domain.UserAggregate;
@@ -8,7 +9,6 @@ import com.example.carrot_market.user.dto.request.SignInResponseDto;
 import com.example.carrot_market.user.dto.request.SignUpRequestDto;
 import com.example.carrot_market.user.service.UserService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,9 +24,8 @@ public class UserController {
     }
 
     @GetMapping("/aop_test")
-    public String dbAccess() throws InterruptedException {
-        Thread.sleep(1000);
-        return "db";
+    public String dbAccess(@RequestParam("test") String test){
+        return "2342342";
     }
 
     @PostMapping("/sign_up")
