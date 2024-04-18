@@ -22,13 +22,14 @@ public interface AreaService {
     
     /**
      * @param productAreaId 상품 지역 ID
-     * @param userAreaId 유저 지역 ID
+     * @param currentRange 지역 범위
+     * @param areaId 유저 지역 ID
      * @return boolean
      * SELECT * FROM areas
      *         WHERE ST_Distance_Sphere(
      *         productAreaId.geo_point,
      *         areaId.geo_point)
-     *         ) &lt;= #{currentRange*800}
+     *         ) &gt;= #{currentRange*800}
      * 특정 지역 ID가 사용자의 현재 설정된 지역에 가까운지 검증한다.
      */
     boolean validateAreaToUserDefault(int productAreaId, int currentRange, int areaId);
