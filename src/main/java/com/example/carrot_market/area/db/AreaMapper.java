@@ -11,7 +11,7 @@ import java.util.List;
 public interface AreaMapper {
 
     Area selectAreaById(int areaId);
-    boolean validateArea(int areaId, int userID);
+    boolean validateArea(int areaId, int userId);
     List<Area> selectAreasByLatLonAndRange(
             @Param("lat") double lat,
             @Param("lon") double lon,
@@ -23,7 +23,7 @@ public interface AreaMapper {
             @Param("rangeArea") int rangeArea,
             @Param("isDefault") boolean isDefault
     );
-    Area updateDefaultArea(int areaId, int userID);
+    Area updateDefaultArea(int areaId, int userId);
     List<Area> selectAreasByUserId(int userId);
 
 }

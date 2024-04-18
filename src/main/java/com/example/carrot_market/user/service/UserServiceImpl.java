@@ -8,6 +8,7 @@ import com.example.carrot_market.core.CommonError;
 import com.example.carrot_market.user.db.UserMapper;
 import com.example.carrot_market.user.domain.User;
 import com.example.carrot_market.user.domain.UserAggregate;
+import com.example.carrot_market.user.dto.UpdateUserRequestDto;
 import com.example.carrot_market.user.dto.request.SignInResponseDto;
 import com.example.carrot_market.user.dto.request.SignUpRequestDto;
 import lombok.extern.log4j.Log4j2;
@@ -45,21 +46,24 @@ public class UserServiceImpl implements UserService {
         areaService.addAreaToUser(
                 singUpRequestDto.getAreaId(),
                 user.getId(),
-                singUpRequestDto.getAreaRange(),
-                true
+                singUpRequestDto.getAreaRange()
         );
 
         Area area = areaService.selectAreaById(singUpRequestDto.getAreaId());
 
-        UserArea userArea = UserArea.builder()
-                .areas(List.of(area))
-                .defaultAreaId(area.getId())
-                .currentRange(AreaRange.convertIDToAreaRange(singUpRequestDto.getAreaRange()))
-                .build();
+        UserArea userArea = getUserArea(singUpRequestDto, area);
 
         return UserAggregate.builder()
                 .user(user)
                 .userArea(userArea)
+                .build();
+    }
+
+    private UserArea getUserArea(SignUpRequestDto singUpRequestDto, Area area) {
+        return UserArea.builder()
+                .areas(List.of(area))
+                .defaultAreaId(area.getId())
+                .currentRange(AreaRange.convertIDToAreaRange(singUpRequestDto.getAreaRange()))
                 .build();
     }
 
@@ -78,6 +82,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserAggregate singIn(SignInResponseDto signInResponseDto) {
+        return null;
+    }
+
+    @Override
+    public User updateUser(UpdateUserRequestDto updateUserRequestDto) {
+        return null;
+    }
+
+    @Override
+    public User getUser(String phoneNumber) {
+        return null;
+    }
+
+    @Override
+    public Boolean unRegister(String phoneNumber) {
         return null;
     }
 }
