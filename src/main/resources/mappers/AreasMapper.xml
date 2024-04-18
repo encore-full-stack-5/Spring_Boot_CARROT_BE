@@ -17,4 +17,16 @@
         VALUES
         (#{userId}, #{areaId}, #{rangeArea}, #{isDefault})
     </insert>
+
+    <!-- 특정 지역 ID가 사용자의 현재 설정된 지역에 가까운지 검증 -->
+    <select id="validateAreaToUserDefault" parameterType="com.example.carrot_market.area.domain.model.Area" resultType="boolean">
+        SELECT IF(ST_DISTANCE_SPHERE(
+        #{productAreaId.geo_point}, #{areaId.geo_point})&gt;=
+        <if test="currentRange == 1">500</if>
+        <if test="currentRange == 2">1000</if>
+        <if test="currentRange == 3">2000</if>
+        , 1, 0
+        )
+        FROM areas
+    </select>
 </mapper>
