@@ -4,6 +4,7 @@ import com.example.carrot_market.area.domain.model.Area;
 import com.example.carrot_market.area.domain.model.AreaRange;
 import com.example.carrot_market.area.dto.AddAreaRequestDto;
 import com.example.carrot_market.area.service.AreaService;
+import com.example.carrot_market.area.service.UpdateUserAreaRequestDto;
 import com.example.carrot_market.core.BaseResponseEntity;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +24,11 @@ public class AreaController {
 
     @GetMapping("/validate")
     public boolean validateAreaToUserDefault(
-            @RequestParam("areaID") int targetAreaId,
-            @RequestParam("userId") int userID
+            @RequestParam("areaId") int targetAreaId,
+            @RequestParam("currentRange") int currentRange,
+            @RequestParam("userId") int userId
     ) {
-        return areaService.validateAreaToUserDefault(targetAreaId, userID);
+        return areaService.validateAreaToUserDefault(targetAreaId, currentRange, userId);
     }
 
     @GetMapping("/search")
@@ -39,20 +41,16 @@ public class AreaController {
     }
 
     @PutMapping("/default")
-    public Area changeDefaultArea(
-            @RequestParam("areaID") int areaId,
-            @RequestParam("userId") int userID
-    ) {
-        return areaService.changeDefaultArea(areaId, userID);
+    public Area changeDefaultArea(@RequestBody UpdateUserAreaRequestDto updateUserAreaRequestDto) {
+        return areaService.updateUserArea(updateUserAreaRequestDto);
     }
 
     @PostMapping
     public ResponseEntity<BaseResponseEntity<?>> addAreaToUser(@Valid @RequestBody AddAreaRequestDto addAreaRequestDto) {
         areaService.addAreaToUser(
                 addAreaRequestDto.getAreaId(),
-                addAreaRequestDto.getUserID(),
-                addAreaRequestDto.getAreaRange(),
-                addAreaRequestDto.isDefault()
+                addAreaRequestDto.getUserId(),
+                addAreaRequestDto.getAreaRange()
         );
         return BaseResponseEntity.ok("success");
     }

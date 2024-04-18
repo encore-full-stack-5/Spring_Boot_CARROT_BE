@@ -23,7 +23,7 @@ public class AreaServiceImpl implements AreaService {
     }
 
     @Override
-    public boolean validateAreaToUserDefault(int targetAreaId, int userID) {
+    public boolean validateAreaToUserDefault(int productAreaId, int currentRange, int areaId) {
         return false;
     }
 
@@ -33,17 +33,24 @@ public class AreaServiceImpl implements AreaService {
     }
 
     @Override
-    public Area changeDefaultArea(int areaId, int userID) {
+    public Area updateUserArea(UpdateUserAreaRequestDto updateUserAreaRequestDto) {
         return null;
     }
 
     @Override
-    public void addAreaToUser(int areaId, int userID, int areaRange, boolean isDefault) {
-        areaMapper.insertAreaToUser(areaId, userID, areaRange, isDefault);
+    public void addAreaToUser(int areaId, int userId, int areaRange) {
+        areaMapper.insertAreaToUser(areaId, userId, areaRange, true);
     }
 
     @Override
-    public List<Area> getAreaListByUserId(int userID) {
+    public List<Area> getAreaListByUserId(int userId) {
         return null;
     }
+
+    @Override
+    public Boolean deleteAreaToUser(int areaId, int userId) {
+        return null;
+    }
+
+
 }

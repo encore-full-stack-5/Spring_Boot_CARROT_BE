@@ -13,7 +13,7 @@
         ) &lt;= #{distance}
     </select>
     <insert id="insertAreaToUser">
-        INSERT INTO user_area (user_id, area_id, range_area, current_state)
+        INSERT INTO user_area (user_id, area_id, range_area, is_default)
         VALUES
         (#{userId}, #{areaId}, #{rangeArea}, #{isDefault})
     </insert>
