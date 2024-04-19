@@ -29,7 +29,7 @@ public interface AreaService {
      *         WHERE ST_Distance_Sphere(
      *         productAreaId.geo_point,
      *         areaId.geo_point)
-     *         ) &gt;= #{currentRange*800}
+     *         ) &lt;= #{currentRange*800}
      * 특정 지역 ID가 사용자의 현재 설정된 지역에 가까운지 검증한다.
      */
     boolean validateAreaToUserDefault(int productAreaId, int currentRange, int areaId);
