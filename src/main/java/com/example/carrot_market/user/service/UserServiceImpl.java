@@ -6,6 +6,7 @@ import com.example.carrot_market.area.domain.model.UserArea;
 import com.example.carrot_market.area.service.AreaService;
 import com.example.carrot_market.core.CommonError;
 import com.example.carrot_market.user.db.UserMapper;
+import com.example.carrot_market.user.db.UserRepository;
 import com.example.carrot_market.user.domain.User;
 import com.example.carrot_market.user.domain.UserAggregate;
 import com.example.carrot_market.user.dto.UpdateUserRequestDto;
@@ -37,7 +38,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserAggregate singUp(SignUpRequestDto singUpRequestDto) {
 
-        userMapper.selectUserByPhoneNumber(singUpRequestDto.getPhone()).ifPresent(user1 -> {
+        userMapper.selectUserByPhone(singUpRequestDto.getPhone()).ifPresent(user1 -> {
                     throw new CommonError.Expected.ResourceNotFoundException("이미 회원 가입이 되어있는 번호입니다.");
                 }
         );
@@ -95,8 +96,8 @@ public class UserServiceImpl implements UserService {
         return user;
     }
     @Override
-    public User getUser(String phoneNumber) {
-        return null;
+    public User getUser(String phone) {
+        return userMapper.selectUserByPhone(phone).orElseThrow(() -> new CommonError.Expected.ResourceNotFoundException("찾는 유저가 없습니다."));
     }
     @Override
     public Boolean unRegister(String phoneNumber) {

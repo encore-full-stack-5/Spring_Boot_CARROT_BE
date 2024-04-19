@@ -39,6 +39,10 @@ public class UserController {
         return BaseResponseEntity.ok(userService.singIn(signInResponseDto), "success");
     }
 
+    @GetMapping
+    public ResponseEntity<BaseResponseEntity<User>> getUserByPhone(@RequestParam("phone") String phone) {
+        return BaseResponseEntity.ok(userService.getUser(phone), "success");
+    }
 
     @PutMapping("/{id}")
     public User updateUser(@PathVariable("id") int id, @RequestBody UpdateUserRequestDto req){

@@ -9,8 +9,7 @@ import com.example.carrot_market.user.dto.request.SignUpRequestDto;
 public interface UserService {
     UserAggregate singUp(SignUpRequestDto singUpRequestDto);
     UserAggregate singIn(SignInResponseDto signInResponseDto);
+    User getUser(String phone);
+    Boolean unRegister(String phone);
     User updateUser(int id, UpdateUserRequestDto updateUserRequestDto);
-    User getUser(String phoneNumber);
-    Boolean unRegister(String phoneNumber);
-
 }

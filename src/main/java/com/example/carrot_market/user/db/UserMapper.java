@@ -8,7 +8,7 @@ import java.util.Optional;
 @Mapper
 public interface UserMapper {
     Optional<User> selectUserById(int id);
-    Optional<User> selectUserByPhoneNumber(String phoneNumber);
+    Optional<User> selectUserByPhone(String phone);
     void insertUser(User user);
     void updateUser(User user);
 }

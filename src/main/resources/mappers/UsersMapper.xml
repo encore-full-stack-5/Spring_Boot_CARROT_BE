@@ -21,7 +21,7 @@
         SELECT * FROM users WHERE id = #{id}
     </select>
 
-    <select id="selectUserByPhoneNumber" parameterType="String" resultMap="userResultMap">
+    <select id="selectUserByPhone" parameterType="String" resultMap="userResultMap">
         SELECT * FROM users WHERE phone = #{phone}
     </select>
 
