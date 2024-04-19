@@ -9,6 +9,7 @@ import com.example.carrot_market.user.dto.request.SignInResponseDto;
 import com.example.carrot_market.user.dto.request.SignUpRequestDto;
 import com.example.carrot_market.user.service.UserService;
 import jakarta.validation.Valid;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,4 +38,11 @@ public class UserController {
     public ResponseEntity<BaseResponseEntity<UserAggregate>> signIn(@Valid @RequestBody SignInResponseDto signInResponseDto) {
         return BaseResponseEntity.ok(userService.singIn(signInResponseDto), "success");
     }
+
+    @GetMapping
+    public ResponseEntity<BaseResponseEntity<User>> getUserByPhone(@RequestParam("phone") String phone) {
+        return BaseResponseEntity.ok(userService.getUser(phone), "success");
+    }
+
+
 }
