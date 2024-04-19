@@ -22,10 +22,9 @@
     <select id="validateAreaToUserDefault" parameterType="com.example.carrot_market.area.domain.model.Area" resultType="boolean">
         SELECT ST_DISTANCE_SPHERE(
             a1.geo_point,a2.geo_point)&lt;=
-            <if test="currentRange == 1">500</if>
-            <if test="currentRange == 2">1000</if>
-            <if test="currentRange == 3">2000</if>
-        )
+            <if test="currentRange == 1">1500</if>
+            <if test="currentRange == 2">3000</if>
+            <if test="currentRange == 3">6000</if>
           FROM areas   a1,
                areas   a2
          WHERE a1.id = ${productAreaId}
