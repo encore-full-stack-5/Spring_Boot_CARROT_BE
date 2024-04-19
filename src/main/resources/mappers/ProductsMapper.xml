@@ -1,0 +1,19 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.carrot_market.product.repository.ProductMapper">
+
+    <insert id="insertProduct" parameterType="com.example.carrot_market.product.domain.Product" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO products (title, state, selling_area_id, seller_id, price, like_count, is_negotiation, content, category_id)
+        VALUES (#{title}, #{state}, #{sellingAreaId}, #{sellerId}, #{price}, #{likeCount}, #{isNegotiation}, #{content}, #{categoryId})
+    </insert>
+
+    <select id="getProductCategories" resultType="com.example.carrot_market.product.domain.ProductCategory">
+        SELECT * FROM product_category
+    </select>
+
+    <update id="updateProductStatus">
+        UPDATE products
+        SET state = #{state}
+        WHERE id = #{id}
+    </update>
+</mapper>

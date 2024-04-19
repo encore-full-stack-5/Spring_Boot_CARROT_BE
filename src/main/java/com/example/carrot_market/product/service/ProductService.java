@@ -1,8 +1,10 @@
 package com.example.carrot_market.product.service;
 
 import com.example.carrot_market.product.domain.Product;
-import com.example.carrot_market.product.dto.CreateProductRequestDto;
+import com.example.carrot_market.product.domain.ProductCategory;
+import com.example.carrot_market.product.dto.InsertProductRequestDto;
 import com.example.carrot_market.product.dto.UpdateProductRequestDto;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -10,11 +12,14 @@ public interface ProductService {
 
     /**
      * 상품을 생성한다.
-     *
-     * @param createProductRequestDto
+     *  status = 1.판매중 2.예약중 3.거래완료 4.업로드중 5.업로드실패
+     * @param insertProductRequestDto
      * @return
      */
-    Product createProduct(CreateProductRequestDto createProductRequestDto);
+    Product insertProduct(
+            InsertProductRequestDto insertProductRequestDto,
+            MultipartFile[] files
+    );
 
     /**
      * 상품을 수정한다. 덮어쓰기 형식
@@ -24,6 +29,8 @@ public interface ProductService {
      */
     Product updateProduct(UpdateProductRequestDto updateProductRequestDto);
 
+
+    List<ProductCategory> getProductCategories();
     /**
      * 상품을 끌어올린다..
      *
