@@ -24,7 +24,7 @@ public class AreaServiceImpl implements AreaService {
 
     @Override
     public boolean validateAreaToUserDefault(int productAreaId, int currentRange, int areaId) {
-        return false;
+        return areaMapper.validateAreaToUserDefault(productAreaId, currentRange, areaId);
     }
 
     @Override
