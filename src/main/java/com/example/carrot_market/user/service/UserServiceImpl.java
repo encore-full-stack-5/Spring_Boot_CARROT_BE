@@ -11,6 +11,7 @@ import com.example.carrot_market.user.domain.UserAggregate;
 import com.example.carrot_market.user.dto.UpdateUserRequestDto;
 import com.example.carrot_market.user.dto.request.SignInResponseDto;
 import com.example.carrot_market.user.dto.request.SignUpRequestDto;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Log4j2
@@ -84,17 +86,18 @@ public class UserServiceImpl implements UserService {
     public UserAggregate singIn(SignInResponseDto signInResponseDto) {
         return null;
     }
-
     @Override
-    public User updateUser(UpdateUserRequestDto updateUserRequestDto) {
-        return null;
+    public User updateUser(int id, UpdateUserRequestDto updateUserRequestDto){
+        Optional<User> user1 = userMapper.selectUserById(id);
+        if(user1.isEmpty()) throw new CommonError.Expected.ResourceNotFoundException("no exist user");
+        User user = updateUserRequestDto.toEntity(id);
+        userMapper.updateUser(user);
+        return user;
     }
-
     @Override
     public User getUser(String phoneNumber) {
         return null;
     }
-
     @Override
     public Boolean unRegister(String phoneNumber) {
         return null;
