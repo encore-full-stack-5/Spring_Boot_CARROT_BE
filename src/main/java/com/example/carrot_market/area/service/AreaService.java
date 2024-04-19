@@ -22,7 +22,8 @@ public interface AreaService {
     
     /**
      * @param productAreaId 상품 지역 ID
-     * @param userAreaId 유저 지역 ID
+     * @param currentRange 지역 범위
+     * @param areaId 유저 지역 ID
      * @return boolean
      * SELECT * FROM areas
      *         WHERE ST_Distance_Sphere(

@@ -26,4 +26,6 @@ public interface AreaMapper {
     Area updateDefaultArea(int areaId, int userId);
     List<Area> selectAreasByUserId(int userId);
 
+    // 특정 지역 ID가 사용자의 현재 설정된 지역에 가까운지 검증
+    boolean validateAreaToUserDefault(int productAreaId, int currentRange, int areaId);
 }
