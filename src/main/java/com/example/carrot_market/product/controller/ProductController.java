@@ -28,9 +28,9 @@ public class ProductController {
     private final ProductService productService;
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<BaseResponseEntity<Product>> addProduct(
-            @Valid @RequestPart(value = "product") InsertProductRequestDto dto
-//            @RequestPart(value = "images", required = false) MultipartFile[] images
+            @Valid @RequestPart(value = "product") InsertProductRequestDto dto,
+            @RequestPart(value = "images", required = false) MultipartFile[] images
     ) {
-        return BaseResponseEntity.ok(productService.insertProduct(dto, null), "상품이 등록되었습니다.");
+        return BaseResponseEntity.ok(productService.insertProduct(dto, images), "상품이 등록되었습니다.");
     }
 }

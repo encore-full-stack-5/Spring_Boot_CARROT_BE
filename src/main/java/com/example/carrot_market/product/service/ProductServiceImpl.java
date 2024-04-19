@@ -53,7 +53,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private Product createProductWithImages(Product product, MultipartFile[] images) {
-        productMapper.insertProduct(product);
         List<CompletableFuture<Boolean>> uploadFutures = new ArrayList<>();
         for (MultipartFile file : images) {
             String imageFileName = makeProductImageName(file, product.getId());
@@ -97,7 +96,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private String makeProductImageName(MultipartFile file, int productId) {
-        return "uploads/" + productId + "/" + file.getOriginalFilename();
+        return "product/" + productId + "/" + file.getOriginalFilename();
     }
 
     @Async
@@ -105,6 +104,7 @@ public class ProductServiceImpl implements ProductService {
         try {
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentLength(file.getSize());
+            metadata.setContentType(file.getContentType());
             s3client.putObject(new PutObjectRequest("carrotmarket", imageFileName, file.getInputStream(), metadata));
             return CompletableFuture.completedFuture(true);
         } catch (IOException e) {
