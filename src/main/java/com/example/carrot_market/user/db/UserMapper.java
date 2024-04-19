@@ -12,6 +12,4 @@ public interface UserMapper {
     Optional<User> selectUserByPhone(String phone);
     void insertUser(User user);
 
-
-
 }

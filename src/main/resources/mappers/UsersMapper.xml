@@ -24,6 +24,4 @@
     <select id="selectUserByPhone" parameterType="String" resultMap="userResultMap">
         SELECT * FROM users WHERE phone = #{phone}
     </select>
-
-
 </mapper>
