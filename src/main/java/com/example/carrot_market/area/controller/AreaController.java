@@ -22,6 +22,7 @@ public class AreaController {
         this.areaService = areaService;
     }
 
+    // 특정 지역 ID가 사용자의 현재 설정된 지역에 가까운지 검증
     @GetMapping("/validate")
     public boolean validateAreaToUserDefault(
             @RequestParam("areaId") int targetAreaId,
@@ -29,6 +30,12 @@ public class AreaController {
             @RequestParam("userId") int userId
     ) {
         return areaService.validateAreaToUserDefault(targetAreaId, currentRange, userId);
+    }
+
+    // 지역 ID를 받아서 지역정보를 반환
+    @GetMapping("/{id}")
+    public Area selectAreaById(@PathVariable("id") int areaId) {
+        return areaService.selectAreaById(areaId);
     }
 
     @GetMapping("/search")
