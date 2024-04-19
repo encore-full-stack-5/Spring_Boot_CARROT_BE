@@ -5,6 +5,7 @@ import com.example.carrot_market.core.CommonError;
 import com.example.carrot_market.core.aop.ExeTimer;
 import com.example.carrot_market.user.domain.User;
 import com.example.carrot_market.user.domain.UserAggregate;
+import com.example.carrot_market.user.dto.UpdateUserRequestDto;
 import com.example.carrot_market.user.dto.request.SignInResponseDto;
 import com.example.carrot_market.user.dto.request.SignUpRequestDto;
 import com.example.carrot_market.user.service.UserService;
@@ -36,5 +37,11 @@ public class UserController {
     @PostMapping("/sign_in")
     public ResponseEntity<BaseResponseEntity<UserAggregate>> signIn(@Valid @RequestBody SignInResponseDto signInResponseDto) {
         return BaseResponseEntity.ok(userService.singIn(signInResponseDto), "success");
+    }
+
+
+    @PutMapping("/{id}")
+    public User updateUser(@PathVariable("id") int id, @RequestBody UpdateUserRequestDto req){
+        return this.userService.updateUser(id, req);
     }
 }
