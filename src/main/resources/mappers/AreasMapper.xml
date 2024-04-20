@@ -35,11 +35,10 @@
     </select>
 
     <!-- 사용자에게 설정된 지역 목록 -->
-    <select id="getAreaListByUserId" parameterType="int" resultType="List">
+    <select id="getAreaListByUserId" parameterType="int" resultType="com.example.carrot_market.area.domain.model.Area">
         SELECT a.*
-          FROM user_area    ua
-          JOIN areas        a
-            ON a.id       = ua.area_id
-         WHERE ua.user_id = #{userId}
+        FROM areas a
+        JOIN user_area ua ON a.id = ua.area_id
+        WHERE ua.user_id = #{userId}
     </select>
 </mapper>
