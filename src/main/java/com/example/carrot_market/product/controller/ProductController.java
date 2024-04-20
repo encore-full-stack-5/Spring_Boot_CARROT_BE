@@ -7,6 +7,8 @@ import com.example.carrot_market.area.service.AreaService;
 import com.example.carrot_market.area.service.UpdateUserAreaRequestDto;
 import com.example.carrot_market.core.BaseResponseEntity;
 import com.example.carrot_market.product.domain.Product;
+import com.example.carrot_market.product.domain.ProductAggregate;
+import com.example.carrot_market.product.domain.ProductCategory;
 import com.example.carrot_market.product.dto.InsertProductRequestDto;
 import com.example.carrot_market.product.service.ProductService;
 import jakarta.validation.Valid;
@@ -17,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @RestController
@@ -33,4 +36,33 @@ public class ProductController {
     ) {
         return BaseResponseEntity.ok(productService.insertProduct(dto, images), "상품이 등록되었습니다.");
     }
+
+    //fetchProducts with cursor paging
+    @GetMapping
+    public ResponseEntity<BaseResponseEntity<List<ProductAggregate>>> fetchProducts(
+            @RequestParam("category") int category,
+            @RequestParam("area") int area,
+            @RequestParam("limit") int limit,
+            @RequestParam("lastProductId") int lastProductId,
+            @RequestParam("areaRange") int areaRange
+    ) {
+        return BaseResponseEntity.ok(
+                productService.fetchProducts(category, area, limit, lastProductId, AreaRange.convertIDToAreaRange(areaRange)),
+                "success"
+        );
+    }
+
+    @GetMapping("categories")
+    public ResponseEntity<BaseResponseEntity<List<ProductCategory>>> getProductCategories() {
+        return BaseResponseEntity.ok(productService.getProductCategories(), "success");
+    }
+
+    //update product state
+    @PutMapping("{id}/state")
+    public ResponseEntity<?> updateProductState(@PathVariable("id") int id, @RequestParam("state") int state) {
+        productService.updateProductStatus(id, state);
+        return BaseResponseEntity.ok("success");
+    }
+
+
 }
