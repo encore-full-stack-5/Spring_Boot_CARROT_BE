@@ -48,8 +48,8 @@ public class AreaServiceImpl implements AreaService {
     }
 
     @Override
-    public Boolean deleteAreaToUser(int areaId, int userId) {
-        return null;
+    public void deleteAreaToUser(int areaId, int userId) {
+        areaMapper.deleteAreaToUser(areaId, userId);
     }
 
 

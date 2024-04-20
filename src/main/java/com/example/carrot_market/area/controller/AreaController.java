@@ -54,4 +54,11 @@ public class AreaController {
         );
         return BaseResponseEntity.ok("success");
     }
+    @DeleteMapping
+    public ResponseEntity<BaseResponseEntity<?>> deleteAreaFromUser(@RequestParam("areaId") int areaId, @RequestParam("userId") int userId) {
+        areaService.deleteAreaToUser(areaId,userId
+        );
+
+        return BaseResponseEntity.ok("success");
+    }
 }
