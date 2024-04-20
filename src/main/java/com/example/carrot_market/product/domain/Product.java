@@ -2,12 +2,16 @@ package com.example.carrot_market.product.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
+import lombok.experimental.SuperBuilder;
+
+import java.util.List;
 
 @Getter
 @Builder
+@AllArgsConstructor
 public class Product {
-// # id, seller_id, selling_area_id, category_id, is_negotiation, created_at, state, view_count, title, content, refreshed_at, price, deleted_at, chatting_count, like_count
     private int id;
     private int sellerId;
     private int sellingAreaId;
@@ -23,6 +27,4 @@ public class Product {
     private String deletedAt;
     private int chattingCount;
     private int likeCount;
-
-
 }
