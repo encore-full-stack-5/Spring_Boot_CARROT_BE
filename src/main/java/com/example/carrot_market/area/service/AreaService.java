@@ -44,8 +44,6 @@ public interface AreaService {
      * 위도, 경도, 지역 범위를 받아서 해당 범위 내의 지역 정보를 반환한다.
      */
     List<Area> getAreaToLatLon(double lat, double lon, AreaRange areaRange);
-   
-   
 
 
     /**
