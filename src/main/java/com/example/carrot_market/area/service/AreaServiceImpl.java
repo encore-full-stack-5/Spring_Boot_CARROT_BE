@@ -17,7 +17,7 @@ public class AreaServiceImpl implements AreaService {
         this.areaMapper = areaMapper;
     }
 
-    // 지역 ID를 받아서 지역정보를 반환
+    // 지역 정보를 반환
     @Override
     public Area selectAreaById(int areaId) {
         return areaMapper.selectAreaById(areaId);
@@ -44,9 +44,10 @@ public class AreaServiceImpl implements AreaService {
         areaMapper.insertAreaToUser(areaId, userId, areaRange, true);
     }
 
+    // 사용자에게 설정된 지역 목록
     @Override
     public List<Area> getAreaListByUserId(int userId) {
-        return null;
+        return areaMapper.getAreaListByUserId(userId);
     }
 
     @Override

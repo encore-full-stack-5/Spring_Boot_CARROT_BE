@@ -47,6 +47,12 @@ public class AreaController {
         return areaService.getAreaToLatLon(lat, lon, AreaRange.convertIDToAreaRange(areaRange));
     }
 
+    //사용자에게 설정된 지역 목록
+    @GetMapping("/userAreas/{id}")
+    public List<Area> getAreaListByUserId(@PathVariable("id") int userId) {
+        return areaService.getAreaListByUserId(userId);
+    }
+
     @PutMapping("/default")
     public Area changeDefaultArea(@RequestBody UpdateUserAreaRequestDto updateUserAreaRequestDto) {
         return areaService.updateUserArea(updateUserAreaRequestDto);
