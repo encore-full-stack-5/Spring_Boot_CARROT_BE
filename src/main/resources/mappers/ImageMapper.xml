@@ -6,4 +6,34 @@
         VALUES (#{file_path}, #{type}, #{type_id})
     </insert>
 
+<!--    <select id="findImageByTypeAndTypeId" resultType="com.example.carrot_market.product.domain.ProductImage">-->
+<!--        SELECT *-->
+<!--        FROM images-->
+<!--        WHERE type = #{type} type_id = #{typeId}-->
+<!--    </select>-->
+
+    <resultMap id="productImageResultMap" type="com.example.carrot_market.product.domain.ProductImage">
+        <id property="id" column="id"/>
+        <result property="file_path" column="file_path"/>
+        <result property="type" column="type"/>
+        <result property="type_id" column="type_id"/>
+        <result property="created_at" column="created_at"/>
+    </resultMap>
+
+    <select id="findImagesByProductIds" resultMap="productImageResultMap">
+        SELECT id, file_path, type, type_id, created_at
+        FROM images
+        WHERE type_id IN
+        <foreach item="id" collection="productIds" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        AND type = 1  <!-- Assuming '1' represents the type for product images -->
+    </select>
+
+<!--    &lt;!&ndash; Result Map to map the SQL result to ProductImage objects &ndash;&gt;-->
+<!--    <resultMap id="imageResultMap" type="ProductImage">-->
+<!--        <result column="type_id" property="productId"/>-->
+<!--        <result column="file_path" property="filePath"/>-->
+<!--    </resultMap>-->
+
 </mapper>

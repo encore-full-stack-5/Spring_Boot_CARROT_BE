@@ -2,13 +2,37 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.carrot_market.product.repository.ProductMapper">
 
-    <insert id="insertProduct" parameterType="com.example.carrot_market.product.domain.Product" useGeneratedKeys="true" keyProperty="id">
+
+    <insert id="insertProduct" parameterType="com.example.carrot_market.product.domain.Product"  useGeneratedKeys="true" keyProperty="id">
         INSERT INTO products (title, state, selling_area_id, seller_id, price, like_count, is_negotiation, content, category_id)
         VALUES (#{title}, #{state}, #{sellingAreaId}, #{sellerId}, #{price}, #{likeCount}, #{isNegotiation}, #{content}, #{categoryId})
     </insert>
 
+
+    <select id="findProductsByCategoryAndArea" resultType="com.example.carrot_market.product.domain.Product">
+        SELECT p.*
+        FROM products p
+        JOIN areas a ON p.selling_area_id = a.id
+        WHERE (#{category} = '1' OR p.category_id = #{category})
+        AND (#{lastProductId} IS NULL OR p.id &lt; #{lastProductId})
+        AND ST_Distance_Sphere(a.geo_point, (SELECT geo_point FROM areas WHERE id = #{areaId})) &lt; ${distance}
+        ORDER BY p.id DESC
+        LIMIT #{limit}
+    </select>
+
+<!--    <select id="findProductsByCategoryAndArea" resultType="com.example.carrot_market.product.domain.Product">-->
+<!--        SELECT p.*-->
+<!--        FROM products p-->
+<!--        JOIN areas a ON p.selling_area_id = a.id-->
+<!--        WHERE (#{category} = '1' OR p.category_id = #{category})-->
+<!--        AND (#{lastRefreshTime} IS null OR p.refreshed_at &lt; #{lastRefreshTime})-->
+<!--        AND ST_Distance_Sphere(a.geo_point, (SELECT geo_point FROM areas WHERE id = #{areaId})) &lt; ${distance}-->
+<!--        ORDER BY p.refreshed_at DESC-->
+<!--        LIMIT #{limit}-->
+<!--    </select>-->
+
     <select id="getProductCategories" resultType="com.example.carrot_market.product.domain.ProductCategory">
-        SELECT * FROM product_category
+        SELECT * FROM product_categories
     </select>
 
     <update id="updateProductStatus">
@@ -16,4 +40,6 @@
         SET state = #{state}
         WHERE id = #{id}
     </update>
+
+
 </mapper>

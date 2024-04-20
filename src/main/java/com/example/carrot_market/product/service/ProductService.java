@@ -1,11 +1,14 @@
 package com.example.carrot_market.product.service;
 
+import com.example.carrot_market.area.domain.model.AreaRange;
 import com.example.carrot_market.product.domain.Product;
+import com.example.carrot_market.product.domain.ProductAggregate;
 import com.example.carrot_market.product.domain.ProductCategory;
 import com.example.carrot_market.product.dto.InsertProductRequestDto;
 import com.example.carrot_market.product.dto.UpdateProductRequestDto;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 public interface ProductService {
@@ -43,16 +46,17 @@ public interface ProductService {
      * 상품을 조회한다.
      *
      * @param categoryId
-     * @param areaId
-     * @param offset     상품을 불러오는 시작점 (0부터 시작) 0, 10, 20, 30, 40, 50, ...
+     * @param areaId    사용자의 위치 ID
+     * @param lastProductId  상품을 불러오는 시작 ID
      * @param limit      상품을 불러오는 갯수
      * @return
      */
-    List<Product> fetchProducts(
+    List<ProductAggregate> fetchProducts(
             int categoryId,
             int areaId,
-            int offset,
-            int limit
+            int limit,
+            int lastProductId,
+            AreaRange areaRange
     );
 
     /**
@@ -63,11 +67,7 @@ public interface ProductService {
      * @param limit
      * @return
      */
-    List<Product> getProductsByUserId(
-            int userId,
-            int offset,
-            int limit
-    );
+    List<Product> getProductsByUserId(int userId, int offset, int limit);
 
     /**
      * 메소드 delete로 상품을 삭제한다.
@@ -83,5 +83,5 @@ public interface ProductService {
     // 상품 조회수 올리기
     boolean increaseViewCount(int productId);
 
-
+    void updateProductStatus(int id, int state);
 }
