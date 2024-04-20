@@ -100,7 +100,21 @@ public class UserServiceImpl implements UserService {
         return userMapper.selectUserByPhone(phone).orElseThrow(() -> new CommonError.Expected.ResourceNotFoundException("찾는 유저가 없습니다."));
     }
     @Override
-    public Boolean unRegister(String phoneNumber) {
-        return null;
+    public User unRegister(int id) {
+        LocalDateTime now = LocalDateTime.now();
+        Timestamp deletedAt = Timestamp.valueOf(now);
+        Optional<User> userById = userMapper.selectUserById(id);
+        if(userById.isEmpty()) throw new CommonError.Expected.ResourceNotFoundException("no exist user");
+        User user = User.builder()
+                .id(userById.get().getId())
+                .nickname(userById.get().getNickname())
+                .phone(userById.get().getPhone())
+                .createdAt(userById.get().getCreatedAt())
+                .userScore(userById.get().getUserScore())
+                .profileImage(userById.get().getProfileImage())
+                .deletedAt(deletedAt)
+                .build();
+        userMapper.unRegister(user);
+        return user;
     }
 }

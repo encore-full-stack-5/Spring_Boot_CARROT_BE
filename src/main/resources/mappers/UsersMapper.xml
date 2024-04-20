@@ -33,4 +33,15 @@
         where
             id = #{id}
     </update>
+
+    <update id="unRegister" parameterType="com.example.carrot_market.user.domain.User">
+        update
+            users
+        set
+            deleted_at = #{deletedAt}
+        where
+            id=#{id}
+    </update>
+
+
 </mapper>

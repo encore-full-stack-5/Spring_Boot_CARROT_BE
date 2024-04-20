@@ -48,4 +48,10 @@ public class UserController {
     public User updateUser(@PathVariable("id") int id, @RequestBody UpdateUserRequestDto req){
         return this.userService.updateUser(id, req);
     }
+
+    @PutMapping("/delete/{id}")
+    public User unRegister(@PathVariable("id") int id) {
+        return this.userService.unRegister(id);
+    }
+
 }

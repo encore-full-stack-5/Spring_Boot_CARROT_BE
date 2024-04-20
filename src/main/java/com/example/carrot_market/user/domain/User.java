@@ -3,6 +3,7 @@ package com.example.carrot_market.user.domain;
 import com.example.carrot_market.area.domain.model.UserArea;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Setter;
 
 import java.sql.Timestamp;
 
@@ -15,4 +16,5 @@ public class User {
     Timestamp createdAt;
     double userScore;
     String profileImage;
+    Timestamp deletedAt;
 }

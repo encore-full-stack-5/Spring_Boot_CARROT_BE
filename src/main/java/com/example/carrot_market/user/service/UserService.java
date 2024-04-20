@@ -10,6 +10,6 @@ public interface UserService {
     UserAggregate singUp(SignUpRequestDto singUpRequestDto);
     UserAggregate singIn(SignInResponseDto signInResponseDto);
     User getUser(String phone);
-    Boolean unRegister(String phone);
+    User unRegister(int id);
     User updateUser(int id, UpdateUserRequestDto updateUserRequestDto);
 }
