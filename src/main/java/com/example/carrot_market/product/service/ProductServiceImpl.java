@@ -6,14 +6,20 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.example.carrot_market.area.domain.model.AreaRange;
 import com.example.carrot_market.core.CommonError;
+
+import com.example.carrot_market.product.domain.*;
+import com.example.carrot_market.product.dto.InsertLikeCountRequestDto;
 import com.example.carrot_market.product.domain.Product;
 import com.example.carrot_market.product.domain.ProductAggregate;
 import com.example.carrot_market.product.domain.ProductCategory;
 import com.example.carrot_market.product.domain.ProductImage;
+
 import com.example.carrot_market.product.dto.InsertProductRequestDto;
 import com.example.carrot_market.product.dto.UpdateProductRequestDto;
 import com.example.carrot_market.product.repository.ImageMapper;
 import com.example.carrot_market.product.repository.ProductMapper;
+import com.example.carrot_market.user.db.UserMapper;
+import com.example.carrot_market.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +48,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private final ProductMapper productMapper;
+    @Autowired
+    private final UserMapper userMapper;
     @Autowired
     private final AmazonS3 s3client;
     @Autowired
@@ -133,9 +141,36 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public boolean likeProduct(int productId, int userId) {
-        return false;
+    public void likeProduct(InsertLikeCountRequestDto req) {
+//        Optional<Product> product = productMapper.selectProductById(req.productId());
+//        if(product.isEmpty()) throw new CommonError.Expected.ResourceNotFoundException("no exist product");
+//        Optional<User> user = userMapper.selectUserById(req.userId());
+//        if(user.isEmpty()) throw new CommonError.Expected.ResourceNotFoundException("no exist user");
+        Optional<Like> likeExist = productMapper.selectLike(req);
+        if(!likeExist.isEmpty()) {likeProductCancel(req);}
+        else {
+            LocalDateTime now = LocalDateTime.now();
+            Timestamp timestamp = Timestamp.valueOf(now);
+            // 상품의 type 은 1 이라고 가정
+            // typeId 는 상품의 Id 라고 가정
+            Like like = Like.builder()
+                    .id(0)
+                    .userId(req.userId())
+                    .typeId(req.productId())
+                    .type(1)
+                    .createdAt(timestamp)
+                    .build();
+            productMapper.insertLikeCount(like);
+            productMapper.updateLikeCountProduct(req.productId());
+        }
     }
+
+    @Override
+    public void likeProductCancel(InsertLikeCountRequestDto req) {
+        productMapper.deleteLikeCount(req);
+        productMapper.updateLikeCountProductMinus(req.productId());
+    }
+
 
     @Override
     public boolean increaseViewCount(int productId) {

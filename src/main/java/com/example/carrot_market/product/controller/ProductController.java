@@ -9,6 +9,7 @@ import com.example.carrot_market.core.BaseResponseEntity;
 import com.example.carrot_market.product.domain.Product;
 import com.example.carrot_market.product.domain.ProductAggregate;
 import com.example.carrot_market.product.domain.ProductCategory;
+import com.example.carrot_market.product.dto.InsertLikeCountRequestDto;
 import com.example.carrot_market.product.dto.InsertProductRequestDto;
 import com.example.carrot_market.product.service.ProductService;
 import jakarta.validation.Valid;
@@ -64,9 +65,15 @@ public class ProductController {
         return BaseResponseEntity.ok("success");
     }
 
+
+    @PostMapping("/like_count")
+    public void likeProduct(@RequestBody InsertLikeCountRequestDto req) {
+        this.productService.likeProduct(req);
+    }
     // 상품 삭제
     @PutMapping("/delete/{id}")
     public Product deleteProduct(@PathVariable("id") int productId) {
         return productService.deleteProduct(productId);
+
     }
 }
