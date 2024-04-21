@@ -15,9 +15,9 @@ public enum AreaRange {
 
     public int getDistance() {
         return switch (this) {
-            case Small -> 500;
-            case Medium -> 1000;
-            case Large -> 2000;
+            case Small -> 1500;
+            case Medium -> 3000;
+            case Large -> 6000;
         };
     }
     public static AreaRange convertIDToAreaRange(int id) {

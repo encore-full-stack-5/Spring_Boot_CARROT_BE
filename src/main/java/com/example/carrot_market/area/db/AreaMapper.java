@@ -31,4 +31,7 @@ public interface AreaMapper {
 
     void deleteAreaToUser (int areaId, int userId);
 
+
+    // 사용자에게 설정된 지역 목록
+    List<Area> getAreaListByUserId(int userId);
 }

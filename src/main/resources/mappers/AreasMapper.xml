@@ -1,8 +1,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.carrot_market.area.db.AreaMapper">
 
+    <!-- 지역 ID를 받아서 지역정보를 반환 -->
     <select id="selectAreaById" resultType="com.example.carrot_market.area.domain.model.Area">
-        SELECT * FROM areas WHERE id = #{id}
+        SELECT *
+          FROM areas  a
+         WHERE a.id = #{id}
     </select>
 
     <select id="selectAreasByLatLonAndRange" resultType="com.example.carrot_market.area.domain.model.Area">
@@ -19,7 +22,7 @@
     </insert>
 
     <!-- 특정 지역 ID가 사용자의 현재 설정된 지역에 가까운지 검증 -->
-    <select id="validateAreaToUserDefault" parameterType="com.example.carrot_market.area.domain.model.Area" resultType="boolean">
+    <select id="validateAreaToUserDefault" parameterType="int" resultType="boolean">
         SELECT ST_DISTANCE_SPHERE(
             a1.geo_point,a2.geo_point)&lt;=
             <if test="currentRange == 1">1500</if>
@@ -35,5 +38,13 @@
         from user_area
         where area_id = #{areaId} and user_id = #{userId}
 
+    </select>
+
+    <!-- 사용자에게 설정된 지역 목록 -->
+    <select id="getAreaListByUserId" parameterType="int" resultType="com.example.carrot_market.area.domain.model.Area">
+        SELECT a.*
+        FROM areas a
+        JOIN user_area ua ON a.id = ua.area_id
+        WHERE ua.user_id = #{userId}
     </select>
 </mapper>
