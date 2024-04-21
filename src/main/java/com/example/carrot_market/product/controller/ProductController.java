@@ -63,6 +63,4 @@ public class ProductController {
         productService.updateProductStatus(id, state);
         return BaseResponseEntity.ok("success");
     }
-
-
 }

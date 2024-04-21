@@ -15,4 +15,5 @@ public class User {
     Timestamp createdAt;
     double userScore;
     String profileImage;
+    Timestamp deletedAt;
 }
