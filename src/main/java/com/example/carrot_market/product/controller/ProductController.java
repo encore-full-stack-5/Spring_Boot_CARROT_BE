@@ -63,4 +63,10 @@ public class ProductController {
         productService.updateProductStatus(id, state);
         return BaseResponseEntity.ok("success");
     }
+
+    // 상품 삭제
+    @PutMapping("/delete/{id}")
+    public Product deleteProduct(@PathVariable("id") int productId) {
+        return productService.deleteProduct(productId);
+    }
 }
