@@ -8,6 +8,11 @@
         VALUES (#{title}, #{state}, #{sellingAreaId}, #{sellerId}, #{price}, #{likeCount}, #{isNegotiation}, #{content}, #{categoryId})
     </insert>
 
+    <select id="selectProductById" parameterType="int" resultType="com.example.carrot_market.product.domain.Product">
+        SELECT *
+          FROM products
+         WHERE id = #{productId}
+    </select>
 
     <select id="findProductsByCategoryAndArea" resultType="com.example.carrot_market.product.domain.Product">
         SELECT p.*
@@ -16,6 +21,7 @@
         WHERE (#{category} = '1' OR p.category_id = #{category})
         AND (#{lastProductId} IS NULL OR p.id &lt; #{lastProductId})
         AND ST_Distance_Sphere(a.geo_point, (SELECT geo_point FROM areas WHERE id = #{areaId})) &lt; ${distance}
+        AND ISNULL(p.deleted_at)
         ORDER BY p.id DESC
         LIMIT #{limit}
     </select>
@@ -41,5 +47,11 @@
         WHERE id = #{id}
     </update>
 
+    <!-- 상품 삭제 -->
+    <update id="deleteProduct" parameterType="com.example.carrot_market.product.domain.Product">
+        UPDATE products
+           SET deleted_at = #{deletedAt}
+         WHERE id = #{id}
+    </update>
 
 </mapper>

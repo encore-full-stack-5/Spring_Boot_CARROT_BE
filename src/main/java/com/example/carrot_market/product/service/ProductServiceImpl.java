@@ -5,6 +5,7 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.example.carrot_market.area.domain.model.AreaRange;
+import com.example.carrot_market.core.CommonError;
 import com.example.carrot_market.product.domain.Product;
 import com.example.carrot_market.product.domain.ProductAggregate;
 import com.example.carrot_market.product.domain.ProductCategory;
@@ -26,8 +27,10 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -99,9 +102,34 @@ public class ProductServiceImpl implements ProductService {
         return null;
     }
 
+    // 상품 삭제
     @Override
-    public boolean deleteProduct(int productId) {
-        return false;
+    public Product deleteProduct(int productId) {
+        LocalDateTime now = LocalDateTime.now();
+        Timestamp deletedAt = Timestamp.valueOf(now);
+        Optional<Product> productById = productMapper.selectProductById(productId);
+        // productId 유무
+        if(productById.isEmpty()) throw new CommonError.Expected.ResourceNotFoundException("no exist product");
+
+        Product getProduct = productById.get();
+        Product product = Product.builder()
+                .id(getProduct.getId())
+                .sellerId(getProduct.getSellerId())
+                .sellingAreaId(getProduct.getSellingAreaId())
+                .categoryId(getProduct.getCategoryId())
+                .isNegotiation(getProduct.getIsNegotiation())
+                .createdAt(getProduct.getCreatedAt())
+                .state(getProduct.getState())
+                .viewCount(getProduct.getViewCount())
+                .title(getProduct.getTitle())
+                .content(getProduct.getContent())
+                .refreshedAt(getProduct.getRefreshedAt())
+                .price(getProduct.getPrice())
+                .deletedAt(String.valueOf(deletedAt))
+                .likeCount(getProduct.getLikeCount())
+                .build();
+        productMapper.deleteProduct(product);
+        return product;
     }
 
     @Override
