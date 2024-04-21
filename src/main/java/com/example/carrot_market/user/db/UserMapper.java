@@ -11,4 +11,5 @@ public interface UserMapper {
     Optional<User> selectUserByPhone(String phone);
     void insertUser(User user);
     void updateUser(User user);
+    void unRegister(User user);
 }
