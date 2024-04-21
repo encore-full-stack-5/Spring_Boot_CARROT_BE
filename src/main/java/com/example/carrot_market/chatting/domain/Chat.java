@@ -8,6 +8,7 @@ import java.sql.Timestamp;
 
 @Getter
 @Builder
+@Data
 public class Chat {
     private int id;
     private int chatRoomId;

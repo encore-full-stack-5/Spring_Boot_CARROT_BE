@@ -9,6 +9,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,9 +23,16 @@ public class ChatSocketController {
     private final ChattingService chattingService;
 
     @MessageMapping("/{roomId}")
-    @SendTo("/room/{roomId}")
-    public Chat sendMessage(@DestinationVariable int roomId, CreateChatDto chatDto) {
-        log.error("roomId: " + roomId + ", chatDto: " + chatDto.toString());
-        return chattingService.createMessage(chatDto);
+    @SendTo("/sub/room/{roomId}")
+    public Chat sendMessage(@DestinationVariable("roomId") int roomId, @Payload CreateChatDto chatDto) {
+        log.info("Received message for room {}: {}", roomId, chatDto);
+        try {
+            Chat response = chattingService.createMessage(chatDto);
+            log.info("Sending response: {}", response.toString());
+            return response;
+        } catch (Exception e) {
+            log.error("Error processing message: ", e);
+            throw e; // Rethrow or handle as appropriate
+        }
     }
 }
