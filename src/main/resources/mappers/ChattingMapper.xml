@@ -1,0 +1,59 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.carrot_market.chatting.repository.ChattingMapper">
+    <!--
+        chat_rooms
+        id, product_id, seller_id, customer_id, create_at, seller_last_read_chat_id, customer_last_read_chat_id, is_exist_seller, is_exist_customer, last_chat
+    -->
+    <!--
+        chat i
+        id, chat_room_id, sender_user_id, sent_at, message, chat_type
+    -->
+
+
+    <insert id="createChatRoom" parameterType="com.example.carrot_market.chatting.domain.ChatRoom" useGeneratedKeys="true"  keyProperty="id">
+        INSERT INTO chat_rooms (product_id, seller_id, customer_id, last_chat)
+        VALUES (#{productId}, #{sellerId}, #{customerId}, #{lastChat})
+    </insert>
+
+    <insert id="createMessage" parameterType="com.example.carrot_market.chatting.domain.Chat" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO chat (chat_room_id, sender_user_id, message, chat_type)
+        VALUES (#{chatRoomId}, #{senderUserId}, #{message}, #{chatType})
+    </insert>
+
+    <select id="findChatRoomByRoomId" parameterType="int" resultType="com.example.carrot_market.chatting.domain.ChatRoom">
+        SELECT *
+        FROM chat_rooms
+        WHERE id = #{roomId}
+    </select>
+
+    <select id="findChatRoomListByUserId" parameterType="int" resultType="com.example.carrot_market.chatting.domain.ChatRoom">
+        SELECT *
+        FROM chat_rooms
+        WHERE seller_id = #{userId} OR customer_id = #{userId}
+    </select>
+
+    <select id="findChatListByRoomId" parameterType="int" resultType="com.example.carrot_market.chatting.domain.Chat">
+        SELECT *
+        FROM chat
+        WHERE chat_room_id = #{roomId}
+    </select>
+
+    <update id="deleteChatRoom" parameterType="int">
+        UPDATE chat_rooms
+        SET is_exist_seller = 0, is_exist_customer = 0
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateLastReadMessage" parameterType="com.example.carrot_market.chatting.domain.ChatRoom">
+        UPDATE chat_rooms
+        SET seller_last_read_chat_id = #{sellerLastReadChatId}, customer_last_read_chat_id = #{customerLastReadChatId}
+        WHERE id = #{id}
+    </update>
+
+    <update id="exitChatRoom" parameterType="com.example.carrot_market.chatting.domain.ChatRoom">
+        UPDATE chatting_room
+        SET is_exist_seller = #{isExistSeller}, is_exist_customer = #{isExistCustomer}
+        WHERE id = #{id}
+    </update>
+
+</mapper>
