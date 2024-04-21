@@ -65,8 +65,15 @@ public class ProductController {
         return BaseResponseEntity.ok("success");
     }
 
+
     @PostMapping("/like_count")
     public void likeProduct(@RequestBody InsertLikeCountRequestDto req) {
         this.productService.likeProduct(req);
+    }
+    // 상품 삭제
+    @PutMapping("/delete/{id}")
+    public Product deleteProduct(@PathVariable("id") int productId) {
+        return productService.deleteProduct(productId);
+
     }
 }

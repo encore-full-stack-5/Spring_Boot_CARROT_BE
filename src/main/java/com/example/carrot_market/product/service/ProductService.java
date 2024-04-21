@@ -76,7 +76,7 @@ public interface ProductService {
      * @param productId
      * @return
      */
-    boolean deleteProduct(int productId);
+    Product deleteProduct(int productId);
 
     // 상품찜하기
     void likeProduct(InsertLikeCountRequestDto req);
