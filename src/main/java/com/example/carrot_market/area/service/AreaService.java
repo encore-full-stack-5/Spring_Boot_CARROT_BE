@@ -81,7 +81,7 @@ public interface AreaService {
      *
      * 지역 ID와 유저 ID를 받아서 user_area 테이블 row를 삭제한다.
      */
-    Boolean deleteAreaToUser(int areaId, int userId);
+    void deleteAreaToUser(int areaId, int userId);
 
 
 }

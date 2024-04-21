@@ -33,6 +33,12 @@
          WHERE a1.id = ${productAreaId}
            AND a2.id = ${areaId}
     </select>
+    <select id="deleteAreaToUser" parameterType="com.example.carrot_market.area.domain.model.Area" resultType="boolean">
+        delete
+        from user_area
+        where area_id = #{areaId} and user_id = #{userId}
+
+    </select>
 
     <!-- 사용자에게 설정된 지역 목록 -->
     <select id="getAreaListByUserId" parameterType="int" resultType="com.example.carrot_market.area.domain.model.Area">
