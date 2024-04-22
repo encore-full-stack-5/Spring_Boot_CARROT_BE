@@ -1,7 +1,6 @@
 package com.example.carrot_market.user.controller;
 
-import com.example.carrot_market.core.BaseResponseEntity;
-import com.example.carrot_market.core.CommonError;
+import com.example.carrot_market.core.base.BaseResponseEntity;
 import com.example.carrot_market.core.aop.ExeTimer;
 import com.example.carrot_market.user.domain.User;
 import com.example.carrot_market.user.domain.UserAggregate;
@@ -47,5 +46,10 @@ public class UserController {
     @PutMapping("/{id}")
     public User updateUser(@PathVariable("id") int id, @RequestBody UpdateUserRequestDto req){
         return this.userService.updateUser(id, req);
+    }
+
+    @PutMapping("/delete/{id}")
+    public User unRegister(@PathVariable("id") int id) {
+        return this.userService.unRegister(id);
     }
 }

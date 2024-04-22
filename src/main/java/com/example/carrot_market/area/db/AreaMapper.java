@@ -28,4 +28,10 @@ public interface AreaMapper {
 
     // 특정 지역 ID가 사용자의 현재 설정된 지역에 가까운지 검증
     boolean validateAreaToUserDefault(int productAreaId, int currentRange, int areaId);
+
+    void deleteAreaToUser (int areaId, int userId);
+
+
+    // 사용자에게 설정된 지역 목록
+    List<Area> getAreaListByUserId(int userId);
 }

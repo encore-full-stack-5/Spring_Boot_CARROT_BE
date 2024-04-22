@@ -1,5 +1,6 @@
-package com.example.carrot_market.core;
+package com.example.carrot_market.core.error;
 
+import com.example.carrot_market.core.base.BaseResponseEntity;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;

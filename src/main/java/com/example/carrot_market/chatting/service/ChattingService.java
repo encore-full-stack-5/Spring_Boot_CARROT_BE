@@ -1,30 +1,27 @@
 package com.example.carrot_market.chatting.service;
 
 
+import com.example.carrot_market.chatting.domain.Chat;
+import com.example.carrot_market.chatting.domain.ChatRoom;
+import com.example.carrot_market.chatting.dto.CreateChatDto;
+import com.example.carrot_market.chatting.dto.CreateChatRoomRequestDto;
+import com.example.carrot_market.chatting.dto.UpdateChatRoomRequestDto;
+
+import java.util.List;
+
 // 웹소켓
 public interface ChattingService {
 
-    /**
-     *
-     * @param productId
-     * @param userId
-     *
-     */
-    void createChattingRoom(int productId, int userId);
-    void joinChattingRoom();
+    ChatRoom createChatRoom(CreateChatRoomRequestDto createChatRoomRequestDto);
+    Chat createMessage(CreateChatDto createChatDto);
 
-    /**
-     * @param ChattingRoomId
-     * @param userId
-     * @return boolean
-     *
-     * 채팅방에 사용자를 추가한다.
-     * @param ChattingRoomId
-     * @param userId
-     */
-    void addUserToChattingRoom(int ChattingRoomId, int userId);
-    void sendMessage();
-    void deleteChattingRoom();
+    void updateChatRoom(UpdateChatRoomRequestDto updateChatRoomRequestDto);
+    void deleteChattingRoom(int roomId);
+    void exitChattingRoom(int roomId, int userId);
 
+    // GET
+    List<ChatRoom> getChatRoomListByUserId(int userId);
+    ChatRoom getChatRoom(int roomId);
+    List<Chat> getChatListByRoomId(int roomId);
 
 }

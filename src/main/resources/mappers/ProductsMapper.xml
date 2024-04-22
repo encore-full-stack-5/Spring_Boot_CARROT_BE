@@ -8,6 +8,11 @@
         VALUES (#{title}, #{state}, #{sellingAreaId}, #{sellerId}, #{price}, #{likeCount}, #{isNegotiation}, #{content}, #{categoryId})
     </insert>
 
+    <select id="selectProductById" parameterType="int" resultType="com.example.carrot_market.product.domain.Product">
+        SELECT *
+          FROM products
+         WHERE id = #{productId}
+    </select>
 
     <select id="findProductsByCategoryAndArea" resultType="com.example.carrot_market.product.domain.Product">
         SELECT p.*
@@ -16,6 +21,7 @@
         WHERE (#{category} = '1' OR p.category_id = #{category})
         AND (#{lastProductId} IS NULL OR p.id &lt; #{lastProductId})
         AND ST_Distance_Sphere(a.geo_point, (SELECT geo_point FROM areas WHERE id = #{areaId})) &lt; ${distance}
+        AND ISNULL(p.deleted_at)
         ORDER BY p.id DESC
         LIMIT #{limit}
     </select>
@@ -39,6 +45,60 @@
         UPDATE products
         SET state = #{state}
         WHERE id = #{id}
+    </update>
+
+
+    <select id="selectProductById" resultType="com.example.carrot_market.product.domain.Product" >
+        SELECT
+            *
+        FROM
+            products
+        WHERE
+            id=#{id}
+    </select>
+
+    <select id="selectLike" parameterType="com.example.carrot_market.product.dto.InsertLikeCountRequestDto">
+        SELECT
+            *
+        FROM
+            likes
+        <if test="productId != null">WHERE type_id=#{productId} </if>
+        <if test="userId != null">AND user_id=#{userId} </if>
+    </select>
+
+    <insert id="insertLikeCount" parameterType="com.example.carrot_market.product.domain.Like">
+        INSERT INTO likes (user_id, type_id, type, created_at)
+        VALUES (#{userId}, #{typeId}, #{type}, #{createdAt})
+    </insert>
+
+    <delete id="deleteLikeCount" parameterType="com.example.carrot_market.product.dto.InsertLikeCountRequestDto">
+        DELETE FROM likes
+        WHERE type_id=#{productId} AND user_id=#{userId}
+    </delete>
+
+    <update id="updateLikeCountProduct">
+        UPDATE
+            products
+        SET
+            like_count = like_count + 1
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateLikeCountProductMinus">
+        UPDATE
+            products
+        SET
+            like_count = like_count - 1
+        WHERE id = #{id}
+    </update>
+
+
+
+    <!-- 상품 삭제 -->
+    <update id="deleteProduct" parameterType="com.example.carrot_market.product.domain.Product">
+        UPDATE products
+           SET deleted_at = #{deletedAt}
+         WHERE id = #{id}
     </update>
 
 
