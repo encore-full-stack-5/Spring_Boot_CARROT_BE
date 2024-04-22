@@ -47,16 +47,6 @@
         WHERE id = #{id}
     </update>
 
-
-    <select id="selectProductById" resultType="com.example.carrot_market.product.domain.Product" >
-        SELECT
-            *
-        FROM
-            products
-        WHERE
-            id=#{id}
-    </select>
-
     <select id="selectLike" parameterType="com.example.carrot_market.product.dto.InsertLikeCountRequestDto">
         SELECT
             *
