@@ -7,13 +7,16 @@ import com.example.carrot_market.chatting.dto.CreateChatRoomRequestDto;
 import com.example.carrot_market.chatting.dto.UpdateChatRoomRequestDto;
 import com.example.carrot_market.chatting.service.ChattingService;
 import com.example.carrot_market.core.base.BaseResponseEntity;
+import com.example.carrot_market.core.util.LogUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Log4j2
 @RestController
 @RequestMapping("api/v1/chat")
 @RequiredArgsConstructor
@@ -44,12 +47,15 @@ public class ChattingController {
 
     @GetMapping("/room/{roomId}/chats")
     public ResponseEntity<BaseResponseEntity<List<Chat>>> getChatsByRoomId(@PathVariable("roomId") int roomId) {
+        LogUtil.logPretty("roomId: " + roomId);
         return BaseResponseEntity.ok(chattingService.getChatListByRoomId(roomId), "success");
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<BaseResponseEntity<?>> updateChatRoom(@PathVariable int id, @RequestBody UpdateChatRoomRequestDto updateDto) {
+    @PatchMapping("/room/{id}")
+    public ResponseEntity<BaseResponseEntity<?>> updateChatRoom(@PathVariable("id") int id, @RequestBody UpdateChatRoomRequestDto updateDto) {
         chattingService.updateChatRoom(updateDto);
         return BaseResponseEntity.ok("success");
     }
+
+
 }

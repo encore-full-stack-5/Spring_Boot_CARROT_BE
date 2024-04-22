@@ -1,4 +1,4 @@
-package com.example.carrot_market.core;
+package com.example.carrot_market.core.util;
 
 public class TimeUtil {
 

@@ -8,7 +8,7 @@ import com.example.carrot_market.chatting.dto.CreateChatRoomRequestDto;
 import com.example.carrot_market.chatting.dto.UpdateChatRoomRequestDto;
 import com.example.carrot_market.chatting.repository.ChattingMapper;
 import com.example.carrot_market.core.error.CommonError;
-import com.example.carrot_market.core.TimeUtil;
+import com.example.carrot_market.core.util.TimeUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -67,7 +67,7 @@ public class ChattingServiceImpl implements ChattingService {
     public List<Chat> getChatListByRoomId(int roomId) {
         List<Chat> chats = chatRoomMapper.findChatListByRoomId(roomId);
         if (chats.isEmpty()) {
-            throw new CommonError.Unexpected.IllegalArgumentException("채팅방이 존재하지 않습니다.");
+            throw new CommonError.Unexpected.IllegalArgumentException("채팅이 존재하지 않습니다.");
         }
         return chats;
     }
