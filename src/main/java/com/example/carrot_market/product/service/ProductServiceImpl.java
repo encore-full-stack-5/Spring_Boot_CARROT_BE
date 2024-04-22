@@ -5,8 +5,7 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.example.carrot_market.area.domain.model.AreaRange;
-import com.example.carrot_market.core.CommonError;
-
+import com.example.carrot_market.core.error.CommonError;
 import com.example.carrot_market.product.domain.*;
 import com.example.carrot_market.product.dto.InsertLikeCountRequestDto;
 import com.example.carrot_market.product.domain.Product;

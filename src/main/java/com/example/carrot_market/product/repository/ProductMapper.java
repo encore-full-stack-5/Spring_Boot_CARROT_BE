@@ -26,9 +26,6 @@ public interface ProductMapper {
             @Param("distance") int distance
     );
 
-
-    Optional<Product> selectProductById(int id);
-
     void insertLikeCount(Like like);
 
     void updateLikeCountProduct(int id);
