@@ -18,7 +18,7 @@
     <insert id="insertAreaToUser">
         INSERT INTO user_area (user_id, area_id, range_area, is_default)
         VALUES
-        (#{userId}, #{areaId}, #{rangeArea}, #{isDefault})
+        (#{userId}, #{areaId}, #{areaRange}, #{isDefault})
     </insert>
 
     <!-- 특정 지역 ID가 사용자의 현재 설정된 지역에 가까운지 검증 -->

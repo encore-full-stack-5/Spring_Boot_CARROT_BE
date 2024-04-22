@@ -7,6 +7,8 @@ import com.example.carrot_market.area.service.AreaService;
 import com.example.carrot_market.area.service.UpdateUserAreaRequestDto;
 import com.example.carrot_market.core.base.BaseResponseEntity;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/areas")
+@Log4j2
 public class AreaController {
     @Autowired
     private final AreaService areaService;
@@ -59,7 +62,10 @@ public class AreaController {
     }
 
     @PostMapping
-    public ResponseEntity<BaseResponseEntity<?>> addAreaToUser(@Valid @RequestBody AddAreaRequestDto addAreaRequestDto) {
+    public ResponseEntity<BaseResponseEntity<?>> addAreaToUser(
+//            @Valid
+            @RequestBody AddAreaRequestDto addAreaRequestDto)
+    {
         areaService.addAreaToUser(
                 addAreaRequestDto.getAreaId(),
                 addAreaRequestDto.getUserId(),
