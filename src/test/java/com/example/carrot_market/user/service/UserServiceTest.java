@@ -14,7 +14,7 @@ class UserServiceTest {
     UserService userService;
 
     @Test
-    void singUp() {
+    void signUp() {
         SignUpRequestDto mock = Mockito.mock(SignUpRequestDto.class);
         Mockito.when(mock.getPhone()).thenReturn("010-1234-5678");
         Mockito.when(mock.getAreaId()).thenReturn(1);
@@ -22,7 +22,7 @@ class UserServiceTest {
         Mockito.when(mock.getNickname()).thenReturn("test");
         Mockito.when(mock.getProfileImage()).thenReturn(null);
 
-        userService.singUp(mock);
+        userService.signUp(mock);
     }
 
 }

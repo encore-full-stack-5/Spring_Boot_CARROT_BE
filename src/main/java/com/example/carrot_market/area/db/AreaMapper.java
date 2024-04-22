@@ -20,7 +20,7 @@ public interface AreaMapper {
     void insertAreaToUser(
             @Param("areaId") int areaId,
             @Param("userId") int userId,
-            @Param("rangeArea") int rangeArea,
+            @Param("areaRange") int areaRange,
             @Param("isDefault") boolean isDefault
     );
     Area updateDefaultArea(int areaId, int userId);
@@ -30,7 +30,6 @@ public interface AreaMapper {
     boolean validateAreaToUserDefault(int productAreaId, int currentRange, int areaId);
 
     void deleteAreaToUser (int areaId, int userId);
-
 
     // 사용자에게 설정된 지역 목록
     List<Area> getAreaListByUserId(int userId);

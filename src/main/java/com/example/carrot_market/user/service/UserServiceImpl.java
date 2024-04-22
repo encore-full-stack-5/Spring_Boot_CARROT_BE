@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserAggregate singUp(SignUpRequestDto singUpRequestDto) {
+    public UserAggregate signUp(SignUpRequestDto singUpRequestDto) {
 
         userMapper.selectUserByPhone(singUpRequestDto.getPhone()).ifPresent(user1 -> {
                     throw new CommonError.Expected.ResourceNotFoundException("이미 회원 가입이 되어있는 번호입니다.");
