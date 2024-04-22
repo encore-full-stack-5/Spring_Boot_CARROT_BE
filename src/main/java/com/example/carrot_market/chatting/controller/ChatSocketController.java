@@ -28,7 +28,6 @@ public class ChatSocketController {
         log.info("Received message for room {}: {}", roomId, chatDto);
         try {
             Chat response = chattingService.createMessage(chatDto);
-            log.info("Sending response: {}", response.toString());
             return response;
         } catch (Exception e) {
             log.error("Error processing message: ", e);

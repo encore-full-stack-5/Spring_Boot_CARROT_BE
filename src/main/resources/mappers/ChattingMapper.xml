@@ -44,12 +44,27 @@
         WHERE id = #{id}
     </update>
 
-    <update id="updateLastReadMessage" parameterType="com.example.carrot_market.chatting.domain.ChatRoom">
+    <update id="updateChatRoom" parameterType="com.example.carrot_market.chatting.dto.UpdateChatRoomRequestDto">
         UPDATE chat_rooms
-        SET seller_last_read_chat_id = #{sellerLastReadChatId}, customer_last_read_chat_id = #{customerLastReadChatId}
-        WHERE id = #{id}
+        <set>
+            <if test="sellerLastReadChatId != 0">
+                seller_last_read_chat_id = #{sellerLastReadChatId},
+            </if>
+            <if test="customerLastReadChatId != 0">
+                customer_last_read_chat_id = #{customerLastReadChatId},
+            </if>
+            <if test="isExistSeller != null">
+                is_exist_seller = #{isExistSeller},
+            </if>
+            <if test="isExistCustomer != null">
+                is_exist_customer = #{isExistCustomer},
+            </if>
+            <if test="lastChat != null">
+                last_chat = #{lastChat},
+            </if>
+        </set>
+        WHERE Id = ${id}
     </update>
-
     <update id="exitChatRoom" parameterType="com.example.carrot_market.chatting.domain.ChatRoom">
         UPDATE chatting_room
         SET is_exist_seller = #{isExistSeller}, is_exist_customer = #{isExistCustomer}

@@ -4,8 +4,9 @@ import com.example.carrot_market.chatting.domain.Chat;
 import com.example.carrot_market.chatting.domain.ChatRoom;
 import com.example.carrot_market.chatting.dto.CreateChatDto;
 import com.example.carrot_market.chatting.dto.CreateChatRoomRequestDto;
+import com.example.carrot_market.chatting.dto.UpdateChatRoomRequestDto;
 import com.example.carrot_market.chatting.service.ChattingService;
-import com.example.carrot_market.core.BaseResponseEntity;
+import com.example.carrot_market.core.base.BaseResponseEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -44,5 +45,11 @@ public class ChattingController {
     @GetMapping("/room/{roomId}/chats")
     public ResponseEntity<BaseResponseEntity<List<Chat>>> getChatsByRoomId(@PathVariable("roomId") int roomId) {
         return BaseResponseEntity.ok(chattingService.getChatListByRoomId(roomId), "success");
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<BaseResponseEntity<?>> updateChatRoom(@PathVariable int id, @RequestBody UpdateChatRoomRequestDto updateDto) {
+        chattingService.updateChatRoom(updateDto);
+        return BaseResponseEntity.ok("success");
     }
 }

@@ -2,6 +2,7 @@ package com.example.carrot_market.chatting.service;
 
 import com.example.carrot_market.chatting.domain.Chat;
 import com.example.carrot_market.chatting.domain.ChatRoom;
+import com.example.carrot_market.chatting.dto.UpdateChatRoomRequestDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,5 +34,15 @@ class ChattingServiceImplTest {
         for (Chat chat : chatList) {
             System.out.println(chat.toString());
         }
+    }
+
+    @Test
+    void updateChatRoom() {
+        UpdateChatRoomRequestDto updateChatRoomRequestDto = UpdateChatRoomRequestDto.builder()
+                .id(1)
+                .sellerLastReadChatId(5)
+                .customerLastReadChatId(7)
+                .build();
+        chattingService.updateChatRoom(updateChatRoomRequestDto);
     }
 }

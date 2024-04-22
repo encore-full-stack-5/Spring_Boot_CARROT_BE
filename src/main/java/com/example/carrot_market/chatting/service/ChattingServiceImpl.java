@@ -7,7 +7,7 @@ import com.example.carrot_market.chatting.dto.CreateChatDto;
 import com.example.carrot_market.chatting.dto.CreateChatRoomRequestDto;
 import com.example.carrot_market.chatting.dto.UpdateChatRoomRequestDto;
 import com.example.carrot_market.chatting.repository.ChattingMapper;
-import com.example.carrot_market.core.CommonError;
+import com.example.carrot_market.core.error.CommonError;
 import com.example.carrot_market.core.TimeUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,17 +60,21 @@ public class ChattingServiceImpl implements ChattingService {
 
     @Override
     public ChatRoom getChatRoom(int roomId) {
-        return chatRoomMapper.findChatRoomByRoomId(roomId).orElseThrow(CommonError.Unexpected.IllegalArgumentException::new);
+        return chatRoomMapper.findChatRoomByRoomId(roomId).orElseThrow(() -> new CommonError.Unexpected.IllegalArgumentException("채팅방이 존재하지 않습니다."));
     }
 
     @Override
     public List<Chat> getChatListByRoomId(int roomId) {
-        return chatRoomMapper.findChatListByRoomId(roomId);
+        List<Chat> chats = chatRoomMapper.findChatListByRoomId(roomId);
+        if (chats.isEmpty()) {
+            throw new CommonError.Unexpected.IllegalArgumentException("채팅방이 존재하지 않습니다.");
+        }
+        return chats;
     }
 
     @Override
     public void updateChatRoom(UpdateChatRoomRequestDto updateChatRoomRequestDto) {
-
+        chatRoomMapper.updateChatRoom(updateChatRoomRequestDto);
     }
 
     @Override

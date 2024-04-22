@@ -5,7 +5,7 @@ import com.example.carrot_market.area.domain.model.AreaRange;
 import com.example.carrot_market.area.dto.AddAreaRequestDto;
 import com.example.carrot_market.area.service.AreaService;
 import com.example.carrot_market.area.service.UpdateUserAreaRequestDto;
-import com.example.carrot_market.core.BaseResponseEntity;
+import com.example.carrot_market.core.base.BaseResponseEntity;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

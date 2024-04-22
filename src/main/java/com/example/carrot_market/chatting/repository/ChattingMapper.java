@@ -17,7 +17,6 @@ public interface ChattingMapper {
     List<ChatRoom> findChatRoomListByUserId(@Param("userId") int userId);
     Optional<ChatRoom> findChatRoomByRoomId(@Param("roomId") int roomId);
     List<Chat> findChatListByRoomId(@Param("roomId") int roomId);
-
     void updateLastReadMessage(int roomId, int userId, int chatId);
     void updateChatRoom(UpdateChatRoomRequestDto updateChatRoomRequestDto);
     void deleteChatRoom(int roomId);

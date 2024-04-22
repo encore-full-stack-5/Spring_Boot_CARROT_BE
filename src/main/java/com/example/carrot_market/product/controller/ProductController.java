@@ -1,11 +1,7 @@
 package com.example.carrot_market.product.controller;
 
-import com.example.carrot_market.area.domain.model.Area;
 import com.example.carrot_market.area.domain.model.AreaRange;
-import com.example.carrot_market.area.dto.AddAreaRequestDto;
-import com.example.carrot_market.area.service.AreaService;
-import com.example.carrot_market.area.service.UpdateUserAreaRequestDto;
-import com.example.carrot_market.core.BaseResponseEntity;
+import com.example.carrot_market.core.base.BaseResponseEntity;
 import com.example.carrot_market.product.domain.Product;
 import com.example.carrot_market.product.domain.ProductAggregate;
 import com.example.carrot_market.product.domain.ProductCategory;
@@ -19,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 @RestController

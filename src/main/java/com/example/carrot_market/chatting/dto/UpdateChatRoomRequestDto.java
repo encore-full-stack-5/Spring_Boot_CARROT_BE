@@ -6,9 +6,10 @@ import lombok.Getter;
 @Builder
 @Getter
 public class UpdateChatRoomRequestDto {
+    private int id;
     private int sellerLastReadChatId;
     private int customerLastReadChatId;
-    private boolean isExistSeller;
-    private boolean isExistCustomer;
+    private Integer isExistSeller;
+    private Integer isExistCustomer;
     private String lastChat;
 }

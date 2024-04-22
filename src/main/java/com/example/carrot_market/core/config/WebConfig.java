@@ -1,4 +1,4 @@
-package com.example.carrot_market.core;
+package com.example.carrot_market.core.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
