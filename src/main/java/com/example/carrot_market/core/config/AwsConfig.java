@@ -1,4 +1,4 @@
-package com.example.carrot_market.core;
+package com.example.carrot_market.core.config;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;

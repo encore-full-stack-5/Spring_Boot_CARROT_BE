@@ -1,4 +1,4 @@
-package com.example.carrot_market.core;
+package com.example.carrot_market.core.db;
 
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
@@ -6,7 +6,6 @@ import org.apache.ibatis.type.JdbcType;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class MyStringToListTypeHandler extends BaseTypeHandler<List<String>> {

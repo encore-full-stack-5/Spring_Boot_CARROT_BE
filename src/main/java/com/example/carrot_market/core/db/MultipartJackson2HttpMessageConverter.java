@@ -1,4 +1,4 @@
-package com.example.carrot_market.core;
+package com.example.carrot_market.core.db;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.MediaType;
