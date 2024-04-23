@@ -15,5 +15,4 @@ public class Area {
     private String ri;
     private double latitude;
     private double longitude;
-
 }
