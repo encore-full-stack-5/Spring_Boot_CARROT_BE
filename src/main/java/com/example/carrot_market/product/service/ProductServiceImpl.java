@@ -5,6 +5,7 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.example.carrot_market.area.domain.model.AreaRange;
+import com.example.carrot_market.core.CommonError;
 import com.example.carrot_market.product.domain.Product;
 import com.example.carrot_market.product.domain.ProductAggregate;
 import com.example.carrot_market.product.domain.ProductCategory;
@@ -28,6 +29,7 @@ import java.lang.reflect.Array;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -59,8 +61,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product updateProduct(UpdateProductRequestDto updateProductRequestDto) {
-        return null;
+    public void updateProduct(int id, UpdateProductRequestDto req) {
+       Product product = req.toEntity(id);
+        productMapper.updateProduct(product);
+
+
     }
 
     @Override

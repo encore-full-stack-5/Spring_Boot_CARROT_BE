@@ -19,6 +19,14 @@
         ORDER BY p.id DESC
         LIMIT #{limit}
     </select>
+    <update id="updateProduct" parameterType="com.example.carrot_market.product.domain.Product">
+        update
+            products
+        set
+            title=#{title},content=#{content},is_negotiation=#{isNegotiation}, price=#{price}
+        where
+            id = #{id}
+    </update>
 
 <!--    <select id="findProductsByCategoryAndArea" resultType="com.example.carrot_market.product.domain.Product">-->
 <!--        SELECT p.*-->

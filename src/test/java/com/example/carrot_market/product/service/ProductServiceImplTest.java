@@ -1,5 +1,6 @@
 package com.example.carrot_market.product.service;
 
+import com.example.carrot_market.product.dto.UpdateProductRequestDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -87,6 +87,8 @@ public class UserServiceImpl implements UserService {
     public UserAggregate singIn(SignInResponseDto signInResponseDto) {
         return null;
     }
+
+
     @Override
     public User updateUser(int id, UpdateUserRequestDto updateUserRequestDto){
         Optional<User> user1 = userMapper.selectUserById(id);

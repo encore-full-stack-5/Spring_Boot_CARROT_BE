@@ -10,6 +10,7 @@ import com.example.carrot_market.product.domain.Product;
 import com.example.carrot_market.product.domain.ProductAggregate;
 import com.example.carrot_market.product.domain.ProductCategory;
 import com.example.carrot_market.product.dto.InsertProductRequestDto;
+import com.example.carrot_market.product.dto.UpdateProductRequestDto;
 import com.example.carrot_market.product.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -62,5 +63,12 @@ public class ProductController {
     public ResponseEntity<?> updateProductState(@PathVariable("id") int id, @RequestParam("state") int state) {
         productService.updateProductStatus(id, state);
         return BaseResponseEntity.ok("success");
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateProduct(@PathVariable("id") int id, @RequestBody UpdateProductRequestDto req) {
+       productService.updateProduct(id,req);
+        return BaseResponseEntity.ok("success");
+
+
     }
 }

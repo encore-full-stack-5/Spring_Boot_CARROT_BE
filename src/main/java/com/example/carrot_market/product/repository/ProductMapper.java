@@ -12,7 +12,7 @@ import java.util.List;
 @Mapper
 public interface ProductMapper {
     void insertProduct(Product product);
-    Product updateProduct(UpdateProductRequestDto updateProductRequestDto);
+    void  updateProduct(Product product);
     List<ProductCategory> getProductCategories();
     void updateProductStatus(@Param("id") int id, @Param("state") int state);
     List<Product> findProductsByCategoryAndArea(
@@ -22,4 +22,7 @@ public interface ProductMapper {
             @Param("lastProductId") int lastProductId,
             @Param("distance") int distance
     );
+
+
+
 }
