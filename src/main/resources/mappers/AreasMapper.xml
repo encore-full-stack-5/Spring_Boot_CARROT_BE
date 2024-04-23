@@ -15,10 +15,11 @@
         ST_GeomFromText(CONCAT('POINT(', #{lon}, ' ', #{lat}, ')'))
         ) &lt;= #{distance}
     </select>
+
     <insert id="insertAreaToUser">
         INSERT INTO user_area (user_id, area_id, range_area, is_default)
         VALUES
-        (#{userId}, #{areaId}, #{rangeArea}, #{isDefault})
+        (#{userId}, #{areaId}, #{areaRange}, #{isDefault})
     </insert>
 
     <!-- 특정 지역 ID가 사용자의 현재 설정된 지역에 가까운지 검증 -->
@@ -41,10 +42,36 @@
     </select>
 
     <!-- 사용자에게 설정된 지역 목록 -->
-    <select id="getAreaListByUserId" parameterType="int" resultType="com.example.carrot_market.area.domain.model.Area">
-        SELECT a.*
-        FROM areas a
-        JOIN user_area ua ON a.id = ua.area_id
-        WHERE ua.user_id = #{userId}
+    <select id="getAreaListByUserId" parameterType="int" resultType="com.example.carrot_market.area.domain.model.UserArea">
+        SELECT ua.user_id,
+               ua.area_id,
+               a.do_city,
+               a.si_gu,
+               a.dong,
+               a.eup,
+               a.ri,
+               a.latitude,
+               a.longitude,
+               ua.is_default,
+               ua.range_area
+          FROM user_area ua
+          JOIN areas a
+            ON ua.area_id = a.id
+         WHERE ua.user_id = #{userId}
     </select>
+
+    <update id="updateUserArea">
+        UPDATE user_area
+           SET area_id = #{areaId},
+               range_area = #{areaRange},
+               is_default = #{isDefault}
+         WHERE user_id = #{userId}
+           AND area_id = #{orgAreaId}
+    </update>
+    <update id="updateUserOtherArea">
+        UPDATE user_area
+           SET is_default = 0
+         WHERE user_id = #{userId}
+           AND area_id = #{otherAreaId}
+    </update>
 </mapper>
