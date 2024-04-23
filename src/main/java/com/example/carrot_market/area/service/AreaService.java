@@ -79,6 +79,7 @@ public interface AreaService {
     List<UserArea> getAreaListByUserId(int userId);
 
 
+
     /**
      * @param areaId
      * @param userId
