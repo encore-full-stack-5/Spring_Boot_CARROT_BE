@@ -3,6 +3,8 @@ package com.example.carrot_market.area.service;
 import com.example.carrot_market.area.db.AreaMapper;
 import com.example.carrot_market.area.domain.model.Area;
 import com.example.carrot_market.area.domain.model.AreaRange;
+import com.example.carrot_market.area.domain.model.UserArea;
+import com.example.carrot_market.core.error.CommonError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,8 +37,31 @@ public class AreaServiceImpl implements AreaService {
     }
 
     @Override
-    public Area updateUserArea(UpdateUserAreaRequestDto updateUserAreaRequestDto) {
-        return null;
+    public UpdateUserAreaRequestDto updateUserArea(
+            UpdateUserAreaRequestDto updateUserAreaRequestDto,
+            int orgAreaId
+    ) {
+        List<UserArea> userById = areaMapper.getAreaListByUserId(updateUserAreaRequestDto.getUserId());
+        if(userById.isEmpty()) throw new CommonError.Expected.ResourceNotFoundException("no exist user");
+        // 다른 areaId
+        int otherAreaId = 0;
+        for(UserArea userArea : userById) {
+            if(userArea.getAreaId() != orgAreaId) {
+                otherAreaId = userArea.getAreaId();
+            }
+        }
+
+        UpdateUserAreaRequestDto updateData = UpdateUserAreaRequestDto.builder()
+                .userId(updateUserAreaRequestDto.getUserId())
+                .areaId(updateUserAreaRequestDto.getAreaId())
+                .areaRange(updateUserAreaRequestDto.getAreaRange())
+                .isDefault(updateUserAreaRequestDto.getIsDefault())
+                .orgAreaId(orgAreaId)
+                .otherAreaId(otherAreaId)
+                .build();
+        areaMapper.updateUserArea(updateData);
+        areaMapper.updateUserOtherArea(updateData);
+        return updateData;
     }
 
     @Override
@@ -46,7 +71,7 @@ public class AreaServiceImpl implements AreaService {
 
     // 사용자에게 설정된 지역 목록
     @Override
-    public List<Area> getAreaListByUserId(int userId) {
+    public List<UserArea> getAreaListByUserId(int userId) {
         return areaMapper.getAreaListByUserId(userId);
     }
 
@@ -54,6 +79,4 @@ public class AreaServiceImpl implements AreaService {
     public void deleteAreaToUser(int areaId, int userId) {
         areaMapper.deleteAreaToUser(areaId, userId);
     }
-
-
 }

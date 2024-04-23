@@ -2,6 +2,7 @@ package com.example.carrot_market.area.service;
 
 import com.example.carrot_market.area.domain.model.Area;
 import com.example.carrot_market.area.domain.model.AreaRange;
+import com.example.carrot_market.area.domain.model.UserArea;
 
 import java.util.List;
 
@@ -48,10 +49,13 @@ public interface AreaService {
 
     /**
      * @return Area
-     *
+     * <p>
      * user_area 테이블 정보 수정
      */
-    Area updateUserArea(UpdateUserAreaRequestDto updateUserAreaRequestDto);
+    UpdateUserAreaRequestDto updateUserArea(
+            UpdateUserAreaRequestDto updateUserAreaRequestDto,
+            int orgAreaId
+    );
 
     
     /**
@@ -72,7 +76,7 @@ public interface AreaService {
      *
      * 사용자 ID를 받아서 사용자에게 설정된 지역목록을 불러온다.
      */
-    List<Area> getAreaListByUserId(int userId);
+    List<UserArea> getAreaListByUserId(int userId);
 
 
     /**
