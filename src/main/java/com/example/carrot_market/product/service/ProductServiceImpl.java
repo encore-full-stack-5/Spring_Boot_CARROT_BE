@@ -72,8 +72,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product updateProduct(UpdateProductRequestDto updateProductRequestDto) {
-        return null;
+    public void updateProduct(int id, UpdateProductRequestDto req) {
+        Product product = req.toEntity(id);
+        productMapper.updateProduct(product);
     }
 
     @Override
@@ -82,8 +83,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product refreshProduct(int productId) {
-        return null;
+    public void refreshProduct(int productId) {
+        productMapper.refreshProduct(productId);
     }
 
     @Transactional
@@ -107,9 +108,10 @@ public class ProductServiceImpl implements ProductService {
                 )).toList();
     }
 
+    // 사용자가 등록한 상품 조회
     @Override
     public List<Product> getProductsByUserId(int userId, int offset, int limit) {
-        return null;
+        return productMapper.getProductByUserId(userId, offset, limit);
     }
 
     // 상품 삭제
@@ -119,7 +121,7 @@ public class ProductServiceImpl implements ProductService {
         Timestamp deletedAt = Timestamp.valueOf(now);
         Optional<Product> productById = productMapper.selectProductById(productId);
         // productId 유무
-        if(productById.isEmpty()) throw new CommonError.Expected.ResourceNotFoundException("no exist product");
+        if (productById.isEmpty()) throw new CommonError.Expected.ResourceNotFoundException("no exist product");
 
         Product getProduct = productById.get();
         Product product = Product.builder()
@@ -149,8 +151,9 @@ public class ProductServiceImpl implements ProductService {
 //        Optional<User> user = userMapper.selectUserById(req.userId());
 //        if(user.isEmpty()) throw new CommonError.Expected.ResourceNotFoundException("no exist user");
         Optional<Like> likeExist = productMapper.selectLike(req);
-        if(!likeExist.isEmpty()) {likeProductCancel(req);}
-        else {
+        if (!likeExist.isEmpty()) {
+            likeProductCancel(req);
+        } else {
             LocalDateTime now = LocalDateTime.now();
             Timestamp timestamp = Timestamp.valueOf(now);
             // 상품의 type 은 1 이라고 가정
@@ -174,9 +177,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
 
+    // 상품 조회수
     @Override
     public boolean increaseViewCount(int productId) {
-        return false;
+        return productMapper.increaseViewCount(productId);
     }
 
     @Override
@@ -238,7 +242,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Async
-    private CompletableFuture<Boolean> uploadFileToS3(MultipartFile file, String imageFileName) {
+    public CompletableFuture<Boolean> uploadFileToS3(MultipartFile file, String imageFileName) {
         try {
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentLength(file.getSize());
@@ -252,5 +256,4 @@ public class ProductServiceImpl implements ProductService {
             return CompletableFuture.completedFuture(false);
         }
     }
-
 }

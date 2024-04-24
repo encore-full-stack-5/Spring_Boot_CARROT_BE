@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserAggregate singUp(SignUpRequestDto singUpRequestDto) {
+    public UserAggregate signUp(SignUpRequestDto singUpRequestDto) {
 
         userMapper.selectUserByPhone(singUpRequestDto.getPhone()).ifPresent(user1 -> {
                     throw new CommonError.Expected.ResourceNotFoundException("이미 회원 가입이 되어있는 번호입니다.");
@@ -61,11 +61,12 @@ public class UserServiceImpl implements UserService {
     }
 
     private UserArea getUserArea(SignUpRequestDto singUpRequestDto, Area area) {
-        return UserArea.builder()
-                .areas(List.of(area))
-                .defaultAreaId(area.getId())
-                .currentRange(AreaRange.convertIDToAreaRange(singUpRequestDto.getAreaRange()))
-                .build();
+        return null;
+//        return UserArea.builder()
+//                .areas(List.of(area))
+//                .defaultAreaId(area.getId())
+//                .currentRange(AreaRange.convertIDToAreaRange(singUpRequestDto.getAreaRange()))
+//                .build();
     }
 
     private static User makeUser(SignUpRequestDto singUpRequestDto) {
