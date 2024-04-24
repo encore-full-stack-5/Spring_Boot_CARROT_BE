@@ -32,6 +32,29 @@
         WHERE seller_id = #{userId} OR customer_id = #{userId}
     </select>
 
+    <select id="findChatRoomAggregateListByUserId" parameterType="int" resultType="com.example.carrot_market.chatting.domain.ChatRoomAggregate">
+        SELECT cr.*,
+        u.id AS partnerId,
+        u.nickname,
+        u.profile_image,
+        a.dong as address,
+        p.title as productTitle,
+        p.price as productPrice,
+        p.state as productState,
+        productImage
+        FROM chat_rooms cr
+        LEFT JOIN
+            users u ON (cr.seller_id = #{userId} AND cr.customer_id = u.id) OR (cr.customer_id = #{userId} AND cr.seller_id = u.id)
+        LEFT JOIN
+            products p ON cr.product_id = p.id
+        LEFT JOIN
+            areas a ON p.selling_area_id = a.id
+        LEFT JOIN
+            (SELECT type_id, MIN(file_path) AS productImage FROM images WHERE type = 1 GROUP BY type_id) img ON p.id = img.type_id
+        WHERE cr.seller_id = #{userId} OR cr.customer_id = #{userId}
+    </select>
+
+
     <select id="findChatListByRoomId" parameterType="int" resultType="com.example.carrot_market.chatting.domain.Chat">
         SELECT *
         FROM chat
