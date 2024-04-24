@@ -39,4 +39,6 @@ public interface ProductMapper {
   
     // 상품 삭제
     void deleteProduct(Product product);
+    // 상품 조회수
+    boolean increaseViewCount(int productId);
 }

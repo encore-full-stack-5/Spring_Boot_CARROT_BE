@@ -67,12 +67,11 @@ public class ProductServiceImpl implements ProductService {
         }
         return createProductWithImages(product, files);
     }
+
     @Override
     public void updateProduct(int id, UpdateProductRequestDto req) {
         Product product = req.toEntity(id);
         productMapper.updateProduct(product);
-
-
     }
 
     @Override
@@ -119,7 +118,7 @@ public class ProductServiceImpl implements ProductService {
         Timestamp deletedAt = Timestamp.valueOf(now);
         Optional<Product> productById = productMapper.selectProductById(productId);
         // productId 유무
-        if(productById.isEmpty()) throw new CommonError.Expected.ResourceNotFoundException("no exist product");
+        if (productById.isEmpty()) throw new CommonError.Expected.ResourceNotFoundException("no exist product");
 
         Product getProduct = productById.get();
         Product product = Product.builder()
@@ -149,8 +148,9 @@ public class ProductServiceImpl implements ProductService {
 //        Optional<User> user = userMapper.selectUserById(req.userId());
 //        if(user.isEmpty()) throw new CommonError.Expected.ResourceNotFoundException("no exist user");
         Optional<Like> likeExist = productMapper.selectLike(req);
-        if(!likeExist.isEmpty()) {likeProductCancel(req);}
-        else {
+        if (!likeExist.isEmpty()) {
+            likeProductCancel(req);
+        } else {
             LocalDateTime now = LocalDateTime.now();
             Timestamp timestamp = Timestamp.valueOf(now);
             // 상품의 type 은 1 이라고 가정
@@ -174,9 +174,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
 
+    // 상품 조회수
     @Override
     public boolean increaseViewCount(int productId) {
-        return false;
+        return productMapper.increaseViewCount(productId);
     }
 
     @Override
@@ -238,7 +239,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Async
-    private CompletableFuture<Boolean> uploadFileToS3(MultipartFile file, String imageFileName) {
+    public CompletableFuture<Boolean> uploadFileToS3(MultipartFile file, String imageFileName) {
         try {
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentLength(file.getSize());
@@ -252,5 +253,4 @@ public class ProductServiceImpl implements ProductService {
             return CompletableFuture.completedFuture(false);
         }
     }
-
 }
