@@ -25,7 +25,8 @@ public interface ProductMapper {
             @Param("lastProductId") int lastProductId,
             @Param("distance") int distance
     );
-
+    // 사용자가 등록한 상품 조회
+    List<Product> getProductByUserId(int userId, int offset, int limit);
     void insertLikeCount(Like like);
 
     void updateLikeCountProduct(int id);
