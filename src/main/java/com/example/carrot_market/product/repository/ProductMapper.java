@@ -4,7 +4,6 @@ import com.example.carrot_market.product.domain.Like;
 import com.example.carrot_market.product.domain.Product;
 import com.example.carrot_market.product.domain.ProductCategory;
 import com.example.carrot_market.product.dto.InsertLikeCountRequestDto;
-import com.example.carrot_market.product.dto.UpdateProductRequestDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -41,4 +40,6 @@ public interface ProductMapper {
     void deleteProduct(Product product);
     // 상품 조회수
     boolean increaseViewCount(int productId);
+    // 상품 끌올
+    void refreshProduct(int productId);
 }

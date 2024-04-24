@@ -108,4 +108,11 @@
            SET view_count = view_count + 1
          WHERE id = #{productId}
     </update>
+
+    <!-- 상품 끌올 -->
+    <update id="refreshProduct" parameterType="int">
+        UPDATE products
+           SET refreshed_at = now()
+         WHERE id = #{productId}
+    </update>
 </mapper>
