@@ -60,9 +60,7 @@ public class ProductServiceImpl implements ProductService {
             InsertProductRequestDto insertProductRequestDto,
             MultipartFile[] files
     ) {
-        int state = 4;
-        if(files == null) state = 1;
-        Product product = makeProductByDto(insertProductRequestDto, state);
+        Product product = makeProductByDto(insertProductRequestDto, 1);
         productMapper.insertProduct(product);
         if (files == null) {
             return product;
@@ -190,7 +188,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private Product createProductWithImages(Product product, MultipartFile[] images) {
-        List<CompletableFuture<Boolean>> uploadFutures = new ArrayList<>();
+//        List<CompletableFuture<Boolean>> uploadFutures = new ArrayList<>();
+        List<Boolean> uploadFutures = new ArrayList<>();
         for (MultipartFile file : images) {
             String imageFileName = makeProductImageName(file, product.getId());
             ProductImage image = ProductImage.builder()
@@ -200,21 +199,27 @@ public class ProductServiceImpl implements ProductService {
                     .file_path(imageFileName)
                     .build();
             imageMapper.insertProductImage(image);
-            CompletableFuture<Boolean> future = uploadFileToS3(file, imageFileName);
+//            CompletableFuture<Boolean> future = uploadFileToS3(file, imageFileName);
+            Boolean future = uploadFileToS3Sync(file, imageFileName);
             uploadFutures.add(future);
         }
 
-        CompletableFuture<Void> allUploads = CompletableFuture.allOf(uploadFutures.toArray(new CompletableFuture[0]));
-        allUploads.thenRunAsync(() -> {
-            List<Boolean> results = uploadFutures.stream()
-                    .map(CompletableFuture::join)
-                    .toList();
-            if (results.contains(false)) {
-                productMapper.updateProductStatus(product.getId(), 5);
-            } else {
-                productMapper.updateProductStatus(product.getId(), 1);
-            }
-        });
+
+//        CompletableFuture<Void> allUploads = CompletableFuture.allOf(uploadFutures.toArray(new CompletableFuture[0]));
+//        allUploads.thenRunAsync(() -> {
+//            List<Boolean> results = uploadFutures.stream()
+//                    .map(CompletableFuture::join)
+//                    .toList();
+//            if (results.contains(false)) {
+//                productMapper.updateProductStatus(product.getId(), 5);
+//            } else {
+//                productMapper.updateProductStatus(product.getId(), 1);
+//            }
+//        });
+//
+        if(uploadFutures.contains(false)) {
+            throw new CommonError.Unexpected.ServerError("이미지 업로드에 실패하였습니다.");
+        }
 
         return product;
     }
@@ -254,6 +259,21 @@ public class ProductServiceImpl implements ProductService {
         } catch (Exception e) {
             System.err.println("Error uploading file to S3: " + e.getMessage());
             return CompletableFuture.completedFuture(false);
+        }
+    }
+
+    public boolean uploadFileToS3Sync(MultipartFile file, String imageFileName) {
+        try {
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentLength(file.getSize());
+            metadata.setContentType(file.getContentType());
+            s3client.putObject(new PutObjectRequest("carrotmarket", imageFileName, file.getInputStream(), metadata));
+            return true;
+        } catch (IOException e) {
+            return false;
+        } catch (Exception e) {
+            System.err.println("Error uploading file to S3: " + e.getMessage());
+            return false;
         }
     }
 }
