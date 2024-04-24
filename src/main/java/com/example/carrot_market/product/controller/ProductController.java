@@ -26,6 +26,7 @@ public class ProductController {
 
     @Autowired
     private final ProductService productService;
+
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<BaseResponseEntity<Product>> addProduct(
             @Valid @RequestPart(value = "product") InsertProductRequestDto dto,
@@ -61,6 +62,15 @@ public class ProductController {
         return BaseResponseEntity.ok("success");
     }
 
+    // 사용자가 등록한 상품 조회
+    @GetMapping("userProducts/{id}")
+    public List<Product> getProductsByUserId(
+            @PathVariable("id") int userId,
+            @RequestParam(value="offset", required=false, defaultValue="0") int offset,
+            @RequestParam(value="limit", required=false, defaultValue="5") int limit
+    ) {
+        return productService.getProductsByUserId(userId, offset, limit);
+    }
 
     @PostMapping("/like_count")
     public void likeProduct(@RequestBody InsertLikeCountRequestDto req) {

@@ -106,9 +106,10 @@ public class ProductServiceImpl implements ProductService {
                 )).toList();
     }
 
+    // 사용자가 등록한 상품 조회
     @Override
     public List<Product> getProductsByUserId(int userId, int offset, int limit) {
-        return null;
+        return productMapper.getProductByUserId(userId, offset, limit);
     }
 
     // 상품 삭제
