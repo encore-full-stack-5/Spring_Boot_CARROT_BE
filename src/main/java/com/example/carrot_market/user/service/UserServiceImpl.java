@@ -84,7 +84,25 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserAggregate singIn(SignInResponseDto signInResponseDto) {
-        return null;
+
+        log.error("signInResponseDto : {}", signInResponseDto.getPhone());
+        User user = userMapper.selectUserByPhone(signInResponseDto.getPhone()).orElseThrow(() -> {
+            throw new CommonError.Expected.ResourceNotFoundException("회원정보가 존재하지 않습니다.");
+        });
+
+
+        List<Area> areas = areaService.getAreaListByUserId(user.getId());
+
+        UserArea userArea = UserArea.builder()
+                .areas(areas)
+                .currentRange(AreaRange.Large)
+                .defaultAreaId(areas.get(0).getId())
+                .build();
+
+        return UserAggregate.builder()
+                .user(user)
+                .userArea(userArea)
+                .build();
     }
     @Override
     public User updateUser(int id, UpdateUserRequestDto updateUserRequestDto){

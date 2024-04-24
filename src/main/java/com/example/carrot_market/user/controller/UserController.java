@@ -34,7 +34,7 @@ public class UserController {
     }
 
     @PostMapping("/sign_in")
-    public ResponseEntity<BaseResponseEntity<UserAggregate>> signIn(@Valid @RequestBody SignInResponseDto signInResponseDto) {
+    public ResponseEntity<BaseResponseEntity<UserAggregate>> signIn( @RequestBody SignInResponseDto signInResponseDto) {
         return BaseResponseEntity.ok(userService.singIn(signInResponseDto), "success");
     }
 
