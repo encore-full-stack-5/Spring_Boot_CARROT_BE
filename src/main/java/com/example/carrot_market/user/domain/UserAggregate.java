@@ -10,5 +10,5 @@ import java.util.List;
 @Data
 public class UserAggregate {
     User user;
-    UserArea userArea;
+    List<UserArea> userArea;
 }
