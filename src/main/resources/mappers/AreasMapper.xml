@@ -8,12 +8,25 @@
          WHERE a.id = #{id}
     </select>
 
+<!--    <select id="selectAreasByLatLonAndRange" resultType="com.example.carrot_market.area.domain.model.Area">-->
+<!--        SELECT * FROM areas-->
+<!--        WHERE ST_Distance_Sphere(-->
+<!--        geo_point,-->
+<!--        ST_GeomFromText(CONCAT('POINT(', #{lon}, ' ', #{lat}, ')'))-->
+<!--        ) &lt;= #{distance}-->
+<!--    </select>-->
+
     <select id="selectAreasByLatLonAndRange" resultType="com.example.carrot_market.area.domain.model.Area">
-        SELECT * FROM areas
+        SELECT *
+        FROM areas
         WHERE ST_Distance_Sphere(
         geo_point,
         ST_GeomFromText(CONCAT('POINT(', #{lon}, ' ', #{lat}, ')'))
         ) &lt;= #{distance}
+        ORDER BY ST_Distance_Sphere(
+        geo_point,
+        ST_GeomFromText(CONCAT('POINT(', #{lon}, ' ', #{lat}, ')'))
+        ) ASC
     </select>
 
     <insert id="insertAreaToUser">

@@ -8,12 +8,6 @@
         VALUES (#{title}, #{state}, #{sellingAreaId}, #{sellerId}, #{price}, #{likeCount}, #{isNegotiation}, #{content}, #{categoryId})
     </insert>
 
-    <select id="selectProductById" parameterType="int" resultType="com.example.carrot_market.product.domain.Product">
-        SELECT *
-          FROM products
-         WHERE id = #{productId}
-    </select>
-
     <select id="findProductsByCategoryAndArea" resultType="com.example.carrot_market.product.domain.Product">
         SELECT p.*
         FROM products p
@@ -39,6 +33,16 @@
 
     <select id="getProductCategories" resultType="com.example.carrot_market.product.domain.ProductCategory">
         SELECT * FROM product_categories
+    </select>
+
+    <select id="getProductByUserId" parameterType="int" resultType="com.example.carrot_market.product.domain.Product">
+        SELECT p.*
+          FROM products   p
+          JOIN users      u
+            ON u.id     = p.seller_id
+         WHERE u.id     = #{userId}
+         LIMIT #{limit}
+        OFFSET #{offset}
     </select>
 
     <update id="updateProductStatus">
@@ -82,16 +86,6 @@
         WHERE id = #{id}
     </update>
 
-
-
-    <!-- 상품 삭제 -->
-    <update id="deleteProduct" parameterType="com.example.carrot_market.product.domain.Product">
-        UPDATE products
-           SET deleted_at = #{deletedAt}
-         WHERE id = #{id}
-    </update>
-
-
     <select id="selectProductById" resultType="com.example.carrot_market.product.domain.Product" >
         SELECT
             *
@@ -101,43 +95,6 @@
             id=#{id}
     </select>
 
-    <select id="selectLike" parameterType="com.example.carrot_market.product.dto.InsertLikeCountRequestDto">
-        SELECT
-            *
-        FROM
-            likes
-        <if test="productId != null">WHERE type_id=#{productId} </if>
-        <if test="userId != null">AND user_id=#{userId} </if>
-    </select>
-
-    <insert id="insertLikeCount" parameterType="com.example.carrot_market.product.domain.Like">
-        INSERT INTO likes (user_id, type_id, type, created_at)
-        VALUES (#{userId}, #{typeId}, #{type}, #{createdAt})
-    </insert>
-
-    <delete id="deleteLikeCount" parameterType="com.example.carrot_market.product.dto.InsertLikeCountRequestDto">
-        DELETE FROM likes
-        WHERE type_id=#{productId} AND user_id=#{userId}
-    </delete>
-
-    <update id="updateLikeCountProduct">
-        UPDATE
-            products
-        SET
-            like_count = like_count + 1
-        WHERE id = #{id}
-    </update>
-
-    <update id="updateLikeCountProductMinus">
-        UPDATE
-            products
-        SET
-            like_count = like_count - 1
-        WHERE id = #{id}
-    </update>
-
-
-
     <!-- 상품 삭제 -->
     <update id="deleteProduct" parameterType="com.example.carrot_market.product.domain.Product">
         UPDATE products
@@ -145,5 +102,17 @@
          WHERE id = #{id}
     </update>
 
+    <!-- 상품 조회수 -->
+    <update id="increaseViewCount" parameterType="int">
+        UPDATE products
+           SET view_count = view_count + 1
+         WHERE id = #{productId}
+    </update>
 
+    <!-- 상품 끌올 -->
+    <update id="refreshProduct" parameterType="int">
+        UPDATE products
+           SET refreshed_at = now()
+         WHERE id = #{productId}
+    </update>
 </mapper>
