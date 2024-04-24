@@ -72,13 +72,19 @@ public interface AreaService {
    
     /**
      * @param userId
-     * @return List<Area>
+     * @return List<UserArea>
      *
      * 사용자 ID를 받아서 사용자에게 설정된 지역목록을 불러온다.
      */
     List<UserArea> getAreaListByUserId(int userId);
 
-
+    /**
+     * @param userId
+     * @return UserArea
+     *
+     * 사용자 ID를 받아서 사용자에게 기본으로 설정된 지역을 불러온다.
+     */
+    UserArea getDefaultAreaByUserId(int userId);
 
     /**
      * @param areaId

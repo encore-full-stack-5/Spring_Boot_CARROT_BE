@@ -75,6 +75,11 @@ public class AreaServiceImpl implements AreaService {
         return areaMapper.getAreaListByUserId(userId);
     }
 
+    // 사용자에게 기본으로 설정된 지역 목록
+    public UserArea getDefaultAreaByUserId(int userId) {
+        return areaMapper.getDefaultAreaByUserId(userId);
+    }
+
     @Override
     public void deleteAreaToUser(int areaId, int userId) {
         areaMapper.deleteAreaToUser(areaId, userId);
