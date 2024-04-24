@@ -73,6 +73,26 @@
          WHERE ua.user_id = #{userId}
     </select>
 
+    <!-- 사용자에게 기본으로 설정된 지역 목록 -->
+    <select id="getDefaultAreaByUserId" parameterType="int" resultType="com.example.carrot_market.area.domain.model.UserArea">
+        SELECT ua.user_id,
+               ua.area_id,
+               a.do_city,
+               a.si_gu,
+               a.dong,
+               a.eup,
+               a.ri,
+               a.latitude,
+               a.longitude,
+               ua.is_default,
+               ua.range_area
+          FROM user_area ua
+          JOIN areas a
+            ON ua.area_id = a.id
+         WHERE ua.user_id = #{userId}
+           AND ua.is_default = 1
+    </select>
+
     <update id="updateUserArea">
         UPDATE user_area
            SET area_id = #{areaId},
