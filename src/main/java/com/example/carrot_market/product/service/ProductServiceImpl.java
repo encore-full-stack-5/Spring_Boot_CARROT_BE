@@ -67,10 +67,12 @@ public class ProductServiceImpl implements ProductService {
         }
         return createProductWithImages(product, files);
     }
-
     @Override
-    public Product updateProduct(UpdateProductRequestDto updateProductRequestDto) {
-        return null;
+    public void updateProduct(int id, UpdateProductRequestDto req) {
+        Product product = req.toEntity(id);
+        productMapper.updateProduct(product);
+
+
     }
 
     @Override

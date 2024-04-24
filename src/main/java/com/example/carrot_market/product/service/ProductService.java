@@ -28,10 +28,10 @@ public interface ProductService {
     /**
      * 상품을 수정한다. 덮어쓰기 형식
      *
-     * @param updateProductRequestDto
+     * @param req
      * @return
      */
-    Product updateProduct(UpdateProductRequestDto updateProductRequestDto);
+    void updateProduct(int id, UpdateProductRequestDto req);
 
 
     List<ProductCategory> getProductCategories();
