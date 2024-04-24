@@ -41,7 +41,7 @@ public interface ProductService {
      * @param productId
      * @return
      */
-    Product refreshProduct(int productId);
+    void refreshProduct(int productId);
 
     /**
      * 상품을 조회한다.

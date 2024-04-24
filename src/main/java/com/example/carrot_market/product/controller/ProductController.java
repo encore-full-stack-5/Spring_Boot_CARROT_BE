@@ -95,4 +95,12 @@ public class ProductController {
     ) {
         return productService.increaseViewCount(productId);
     }
+
+    // 상품 끌어올리기
+    @PutMapping("refresh/{id}")
+    public void refreshProduct(
+            @PathVariable("id") int productId
+    ) {
+        productService.refreshProduct(productId);
+    }
 }

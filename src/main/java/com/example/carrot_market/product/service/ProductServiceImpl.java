@@ -80,8 +80,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product refreshProduct(int productId) {
-        return null;
+    public void refreshProduct(int productId) {
+        productMapper.refreshProduct(productId);
     }
 
     @Transactional
