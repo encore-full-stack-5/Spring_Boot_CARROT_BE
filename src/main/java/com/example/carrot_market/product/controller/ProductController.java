@@ -7,6 +7,7 @@ import com.example.carrot_market.product.domain.ProductAggregate;
 import com.example.carrot_market.product.domain.ProductCategory;
 import com.example.carrot_market.product.dto.InsertLikeCountRequestDto;
 import com.example.carrot_market.product.dto.InsertProductRequestDto;
+import com.example.carrot_market.product.dto.UpdateProductRequestDto;
 import com.example.carrot_market.product.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -69,6 +70,13 @@ public class ProductController {
     @PutMapping("/delete/{id}")
     public Product deleteProduct(@PathVariable("id") int productId) {
         return productService.deleteProduct(productId);
+
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateProduct(@PathVariable("id") int id, @RequestBody UpdateProductRequestDto req) {
+        productService.updateProduct(id,req);
+        return BaseResponseEntity.ok("success");
+
 
     }
 }
