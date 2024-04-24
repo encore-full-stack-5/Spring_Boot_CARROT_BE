@@ -60,11 +60,14 @@ public class ProductServiceImpl implements ProductService {
             InsertProductRequestDto insertProductRequestDto,
             MultipartFile[] files
     ) {
-        Product product = makeProductByDto(insertProductRequestDto);
+        int state = 4;
+        if(files == null) state = 1;
+        Product product = makeProductByDto(insertProductRequestDto, state);
         productMapper.insertProduct(product);
         if (files == null) {
             return product;
         }
+        productMapper.insertProduct(product);
         return createProductWithImages(product, files);
     }
 
@@ -216,14 +219,14 @@ public class ProductServiceImpl implements ProductService {
         return imageMapper.findImageByTypeAndTypeId(type, typeId);
     }
 
-    private static Product makeProductByDto(InsertProductRequestDto dto) {
+    private static Product makeProductByDto(InsertProductRequestDto dto, int state) {
         return Product.builder()
                 .id(0)
                 .sellerId(dto.userId())
                 .sellingAreaId(dto.areaId())
                 .categoryId(dto.categoryId())
                 .isNegotiation(dto.isNegotiation())
-                .state(4)
+                .state(state)
                 .title(dto.title())
                 .content(dto.content())
                 .price(dto.price())
