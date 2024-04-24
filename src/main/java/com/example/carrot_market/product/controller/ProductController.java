@@ -86,7 +86,13 @@ public class ProductController {
     public ResponseEntity<?> updateProduct(@PathVariable("id") int id, @RequestBody UpdateProductRequestDto req) {
         productService.updateProduct(id,req);
         return BaseResponseEntity.ok("success");
+    }
 
-
+    // 상품 조회수
+    @PutMapping("view/{id}")
+    public boolean increaseViewCount(
+            @PathVariable("id") int productId
+    ) {
+        return productService.increaseViewCount(productId);
     }
 }

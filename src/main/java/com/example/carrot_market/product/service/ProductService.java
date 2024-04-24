@@ -84,7 +84,7 @@ public interface ProductService {
     // 상품찜 취소
     void likeProductCancel(InsertLikeCountRequestDto req);
 
-    // 상품 조회수 올리기
+    // 상품 조회수
     boolean increaseViewCount(int productId);
 
     void updateProductStatus(int id, int state);
