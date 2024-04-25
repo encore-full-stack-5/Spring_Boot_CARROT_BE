@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mapper
 public interface AreaMapper {
@@ -36,5 +37,8 @@ public interface AreaMapper {
     void deleteAreaToUser (int areaId, int userId);
 
     // 사용자에게 설정된 지역 목록
+    Optional<Area> getAreaName(@Param("areaId")int areaId);
     List<UserArea> getAreaListByUserId(int userId);
+    // 사용자에게 기본으로 설정된 지역 목록
+    UserArea getDefaultAreaByUserId(int userId);
 }

@@ -2,6 +2,7 @@ package com.example.carrot_market.chatting.repository;
 
 import com.example.carrot_market.chatting.domain.Chat;
 import com.example.carrot_market.chatting.domain.ChatRoom;
+import com.example.carrot_market.chatting.domain.ChatRoomAggregate;
 import com.example.carrot_market.chatting.dto.UpdateChatRoomRequestDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -15,6 +16,7 @@ public interface ChattingMapper {
     void createMessage(Chat chat);
 
     List<ChatRoom> findChatRoomListByUserId(@Param("userId") int userId);
+    List<ChatRoomAggregate> findChatRoomAggregateListByUserId(@Param("userId") int userId);
     Optional<ChatRoom> findChatRoomByRoomId(@Param("roomId") int roomId);
     List<Chat> findChatListByRoomId(@Param("roomId") int roomId);
     void updateLastReadMessage(int roomId, int userId, int chatId);

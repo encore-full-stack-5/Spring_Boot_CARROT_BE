@@ -1,0 +1,30 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.carrot_market.board.db.BoardMapper">
+    <!-- 커뮤니티 글 작성 -->
+    <insert id="insertBoard" parameterType="com.example.carrot_market.board.domain.model.Board">
+        INSERT INTO boards (user_id, area_id, content, category, title)
+              VALUE (#{userId}, #{areaId}, #{content}, #{category}, #{title})
+    </insert>
+
+    <!-- 사용자가 작성한 커뮤니티 글목록 조회 -->
+    <select id="getBoardListByUserId" parameterType="int" resultType="com.example.carrot_market.board.domain.model.Board">
+        SELECT b.*,
+               a.dong
+          FROM boards    b
+          JOIN areas     a
+            ON a.id    = b.area_id
+         WHERE user_id = #{userId}
+      ORDER BY b.created_at DESC
+    </select>
+
+    <!-- 설정한 지역의 커뮤니티 글목록 전체 조회 -->
+    <select id="getBoardListByAreaId" parameterType="int" resultType="com.example.carrot_market.board.domain.model.Board">
+        SELECT b.*,
+               a1.dong
+          FROM boards b
+          JOIN areas a1
+            ON a1.id = b.area_id
+         WHERE ST_DISTANCE_SPHERE(a1.geo_point, (SELECT geo_point FROM areas WHERE id = #{areaId})) &lt;= 2000
+      ORDER BY b.created_at DESC
+    </select>
+</mapper>

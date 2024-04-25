@@ -8,12 +8,12 @@
         VALUES (#{title}, #{state}, #{sellingAreaId}, #{sellerId}, #{price}, #{likeCount}, #{isNegotiation}, #{content}, #{categoryId})
     </insert>
 
-    <select id="findProductsByCategoryAndArea" resultType="com.example.carrot_market.product.domain.Product">
-        SELECT p.*
+    <select id="findProductsByCategoryAndArea" resultType="com.example.carrot_market.product.domain.ProductResponseDto">
+        SELECT p.*, a.dong as address
         FROM products p
         JOIN areas a ON p.selling_area_id = a.id
         WHERE (#{category} = '1' OR p.category_id = #{category})
-        AND (#{lastProductId} IS NULL OR p.id &lt; #{lastProductId})
+        AND ((#{lastProductId} IS NULL OR #{lastProductId} = 0) OR p.id &lt; #{lastProductId})
         AND ST_Distance_Sphere(a.geo_point, (SELECT geo_point FROM areas WHERE id = #{areaId})) &lt; ${distance}
         AND ISNULL(p.deleted_at)
         ORDER BY p.id DESC
@@ -101,6 +101,10 @@
            SET deleted_at = #{deletedAt}
          WHERE id = #{id}
     </update>
+
+    <select id="getCategoryName" parameterType="int">
+        SELECT name FROM product_categories WHERE id=#{categoryId}
+    </select>
 
     <!-- 상품 조회수 -->
     <update id="increaseViewCount" parameterType="int">

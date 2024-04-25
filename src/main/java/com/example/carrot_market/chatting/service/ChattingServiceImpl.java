@@ -2,6 +2,7 @@ package com.example.carrot_market.chatting.service;
 
 import com.example.carrot_market.chatting.domain.Chat;
 import com.example.carrot_market.chatting.domain.ChatRoom;
+import com.example.carrot_market.chatting.domain.ChatRoomAggregate;
 import com.example.carrot_market.chatting.domain.ChatType;
 import com.example.carrot_market.chatting.dto.CreateChatDto;
 import com.example.carrot_market.chatting.dto.CreateChatRoomRequestDto;
@@ -54,8 +55,8 @@ public class ChattingServiceImpl implements ChattingService {
     }
 
     @Override
-    public List<ChatRoom> getChatRoomListByUserId(int userId) {
-        return chatRoomMapper.findChatRoomListByUserId(userId);
+    public List<ChatRoomAggregate> getChatRoomListByUserId(int userId) {
+        return chatRoomMapper.findChatRoomAggregateListByUserId(userId);
     }
 
     @Override

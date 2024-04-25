@@ -52,21 +52,28 @@ public class UserServiceImpl implements UserService {
 
         Area area = areaService.selectAreaById(singUpRequestDto.getAreaId());
 
-        UserArea userArea = getUserArea(singUpRequestDto, area);
+        UserArea userArea = getUserArea(user, area, singUpRequestDto);
 
         return UserAggregate.builder()
                 .user(user)
-                .userArea(userArea)
+                .userArea(List.of(userArea))
                 .build();
     }
 
-    private UserArea getUserArea(SignUpRequestDto singUpRequestDto, Area area) {
-        return null;
-//        return UserArea.builder()
-//                .areas(List.of(area))
-//                .defaultAreaId(area.getId())
-//                .currentRange(AreaRange.convertIDToAreaRange(singUpRequestDto.getAreaRange()))
-//                .build();
+    private UserArea getUserArea(User user, Area area, SignUpRequestDto singUpRequestDto) {
+        return UserArea.builder()
+                .userId(user.getId())
+                .areaId(singUpRequestDto.getAreaId())
+                .do_city(area.getDo_city())
+                .si_gu(area.getSi_gu())
+                .dong(area.getDong())
+                .eup(area.getEup())
+                .ri(area.getRi())
+                .latitude(area.getLatitude())
+                .longitude(area.getLongitude())
+                .isDefault(1)
+                .areaRange(singUpRequestDto.getAreaRange())
+                .build();
     }
 
     private static User makeUser(SignUpRequestDto singUpRequestDto) {
@@ -91,17 +98,10 @@ public class UserServiceImpl implements UserService {
         });
 
 
-        List<Area> areas = areaService.getAreaListByUserId(user.getId());
-
-        UserArea userArea = UserArea.builder()
-                .areas(areas)
-                .currentRange(AreaRange.Large)
-                .defaultAreaId(areas.get(0).getId())
-                .build();
-
+        List<UserArea> areas = areaService.getAreaListByUserId(user.getId());
         return UserAggregate.builder()
                 .user(user)
-                .userArea(userArea)
+                .userArea(areas)
                 .build();
     }
     @Override
