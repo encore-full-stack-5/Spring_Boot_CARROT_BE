@@ -47,4 +47,8 @@
         JOIN user_area ua ON a.id = ua.area_id
         WHERE ua.user_id = #{userId}
     </select>
+
+    <select id="getAreaName" parameterType="int" resultType="com.example.carrot_market.area.domain.model.Area">
+        SELECT * FROM areas WHERE id=#{areaId}
+    </select>
 </mapper>

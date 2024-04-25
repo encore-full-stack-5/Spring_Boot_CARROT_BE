@@ -1,5 +1,6 @@
 package com.example.carrot_market.product.repository;
 
+import com.example.carrot_market.area.domain.model.Area;
 import com.example.carrot_market.product.domain.Like;
 import com.example.carrot_market.product.domain.Product;
 import com.example.carrot_market.product.domain.ProductCategory;
@@ -38,4 +39,8 @@ public interface ProductMapper {
   
     // 상품 삭제
     void deleteProduct(Product product);
+
+    String getCategoryName(@Param("categoryId") int categoryId);
+
+
 }

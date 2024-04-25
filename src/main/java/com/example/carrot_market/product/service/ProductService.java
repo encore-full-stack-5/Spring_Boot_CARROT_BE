@@ -9,7 +9,6 @@ import com.example.carrot_market.product.dto.InsertProductRequestDto;
 import com.example.carrot_market.product.dto.UpdateProductRequestDto;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 public interface ProductService {
@@ -88,4 +87,8 @@ public interface ProductService {
     boolean increaseViewCount(int productId);
 
     void updateProductStatus(int id, int state);
+
+    ProductAggregate selectProductById(int productId);
+
+
 }

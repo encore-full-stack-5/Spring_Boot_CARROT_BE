@@ -13,4 +13,6 @@ public interface ImageMapper {
     List<ProductImage> findImageByTypeAndTypeId(int type, int typeId);
     List<ProductImage> findImagesByProductIds(@Param("productIds") List<Integer> productIds);
 
+    List<ProductImage> findImagesByProductIdOne(@Param("productId") int id) ;
+
 }

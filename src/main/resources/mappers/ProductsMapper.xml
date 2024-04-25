@@ -48,14 +48,6 @@
     </update>
 
 
-    <select id="selectProductById" resultType="com.example.carrot_market.product.domain.Product" >
-        SELECT
-            *
-        FROM
-            products
-        WHERE
-            id=#{id}
-    </select>
 
     <select id="selectLike" parameterType="com.example.carrot_market.product.dto.InsertLikeCountRequestDto">
         SELECT
@@ -100,6 +92,16 @@
            SET deleted_at = #{deletedAt}
          WHERE id = #{id}
     </update>
+
+    <select id="getCategoryName" parameterType="int">
+        SELECT name FROM product_categories WHERE id=#{categoryId}
+    </select>
+
+
+
+
+
+
 
 
 </mapper>

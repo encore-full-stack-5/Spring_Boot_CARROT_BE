@@ -13,11 +13,11 @@
 <!--    </select>-->
 
     <resultMap id="productImageResultMap" type="com.example.carrot_market.product.domain.ProductImage">
-        <id property="id" column="id"/>
-        <result property="file_path" column="file_path"/>
-        <result property="type" column="type"/>
+        <result property="id" column="id"/>
         <result property="type_id" column="type_id"/>
+        <result property="file_path" column="file_path"/>
         <result property="created_at" column="created_at"/>
+        <result property="type" column="type"/>
     </resultMap>
 
     <select id="findImagesByProductIds" resultMap="productImageResultMap">
@@ -29,6 +29,15 @@
         </foreach>
         AND type = 1  <!-- Assuming '1' represents the type for product images -->
     </select>
+
+    <select id="findImagesByProductIdOne" resultMap="productImageResultMap">
+        SELECT id, file_path, type, type_id, created_at
+        FROM images
+        WHERE type = 1
+        AND type_id = #{productId}
+    </select>
+
+
 
 <!--    &lt;!&ndash; Result Map to map the SQL result to ProductImage objects &ndash;&gt;-->
 <!--    <resultMap id="imageResultMap" type="ProductImage">-->

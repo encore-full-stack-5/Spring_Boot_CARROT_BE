@@ -71,4 +71,10 @@ public class ProductController {
         return productService.deleteProduct(productId);
 
     }
+
+    @GetMapping("{id}")
+    public ProductAggregate selectProductById(@PathVariable("id") int productId) {
+        return productService.selectProductById(productId);
+    }
+
 }
