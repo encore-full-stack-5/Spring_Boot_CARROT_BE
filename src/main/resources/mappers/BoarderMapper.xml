@@ -27,4 +27,26 @@
          WHERE ST_DISTANCE_SPHERE(a1.geo_point, (SELECT geo_point FROM areas WHERE id = #{areaId})) &lt;= 2000
       ORDER BY b.created_at DESC
     </select>
+
+    <!-- 선택한 커뮤니티의 정보 조회 -->
+    <select id="getDetailBoard" parameterType="int" resultType="com.example.carrot_market.board.dto.getDetailBoardResultDto">
+        SELECT u.id as userId,
+               u.nickname,
+               u.profile_image as userImage,
+               a.id as areaId,
+               a.dong as areaName,
+               bc.name as category,
+               b.id as boardId,
+               b.created_at as createdAt,
+               b.content,
+               b.title,
+               b.view_count as viewCount,
+               b.comment_count as commentCount,
+               b.like_count as likeCount
+          FROM boards b
+          JOIN users u ON b.user_id = u.id
+          JOIN areas a ON b.area_id = a.id
+          JOIN board_categories bc ON b.category = bc.id
+         WHERE b.id = #{boardId}
+    </select>
 </mapper>

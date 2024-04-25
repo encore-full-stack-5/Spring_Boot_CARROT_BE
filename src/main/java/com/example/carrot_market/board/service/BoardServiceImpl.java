@@ -3,10 +3,7 @@ package com.example.carrot_market.board.service;
 import com.example.carrot_market.board.db.BoardMapper;
 import com.example.carrot_market.board.domain.model.Board;
 import com.example.carrot_market.board.domain.model.Comment;
-import com.example.carrot_market.board.dto.AddBoardRequestDto;
-import com.example.carrot_market.board.dto.AddCommentRequestDto;
-import com.example.carrot_market.board.dto.AddNestedCommentRequestDto;
-import com.example.carrot_market.board.dto.UpdateBoardRequestDto;
+import com.example.carrot_market.board.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,9 +37,10 @@ public class BoardServiceImpl implements BoardService {
         return boardMapper.getBoardListByAreaId(areaId);
     }
 
+    // 선택한 커뮤니티의 정보 조회
     @Override
-    public Board getDetailBoard(int boardId) {
-        return null;
+    public getDetailBoardResultDto getDetailBoard(int boardId) {
+        return boardMapper.getDetailBoard(boardId);
     }
 
     @Override
