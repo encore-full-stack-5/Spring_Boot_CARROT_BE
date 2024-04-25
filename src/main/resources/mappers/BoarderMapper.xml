@@ -49,4 +49,21 @@
           JOIN board_categories bc ON b.category = bc.id
          WHERE b.id = #{boardId}
     </select>
+
+    <!-- 단일 커뮤니티 조회 -->
+    <select id="selectBoardById" parameterType="int" resultType="com.example.carrot_market.board.domain.model.Board">
+        SELECT *
+          FROM boards
+         WHERE id = #{id}
+    </select>
+
+    <!-- 사용자가 작성한 커뮤니티의 정보 수정 -->
+    <update id="updateBoard">
+        UPDATE boards
+           SET content = #{content},
+               category = #{category},
+               title = #{title},
+               update_at = #{updateAt}
+         WHERE id = #{id}
+    </update>
 </mapper>
