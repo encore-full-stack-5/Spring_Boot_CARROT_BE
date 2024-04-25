@@ -64,7 +64,6 @@ public class ProductServiceImpl implements ProductService {
         if (files == null) {
             return product;
         }
-        productMapper.insertProduct(product);
         return createProductWithImages(product, files);
     }
 
