@@ -4,6 +4,8 @@ import com.example.carrot_market.area.domain.model.AreaRange;
 import com.example.carrot_market.product.domain.Product;
 import com.example.carrot_market.product.domain.ProductAggregate;
 import com.example.carrot_market.product.domain.ProductCategory;
+import com.example.carrot_market.product.domain.ProductResponseDto;
+import com.example.carrot_market.product.dto.FetchProductResultDto;
 import com.example.carrot_market.product.dto.InsertLikeCountRequestDto;
 import com.example.carrot_market.product.dto.InsertProductRequestDto;
 import com.example.carrot_market.product.dto.UpdateProductRequestDto;
@@ -52,7 +54,7 @@ public interface ProductService {
      * @param limit      상품을 불러오는 갯수
      * @return
      */
-    List<ProductAggregate> fetchProducts(
+    FetchProductResultDto fetchProducts(
             int categoryId,
             int areaId,
             int limit,

@@ -7,6 +7,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.example.carrot_market.area.domain.model.AreaRange;
 import com.example.carrot_market.core.error.CommonError;
 import com.example.carrot_market.product.domain.*;
+import com.example.carrot_market.product.dto.FetchProductResultDto;
 import com.example.carrot_market.product.dto.InsertLikeCountRequestDto;
 import com.example.carrot_market.product.domain.Product;
 import com.example.carrot_market.product.domain.ProductAggregate;
@@ -87,23 +88,31 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional
     @Override
-    public List<ProductAggregate> fetchProducts(int category, int areaId, int limit, int lastProductId, AreaRange areaRange) {
-        List<Product> products = productMapper.findProductsByCategoryAndArea(
+    public FetchProductResultDto fetchProducts(int category, int areaId, int limit, int lastProductId, AreaRange areaRange) {
+        List<ProductResponseDto> products = productMapper.findProductsByCategoryAndArea(
                 category,
                 areaId,
                 limit,
                 lastProductId,
                 areaRange.getDistance()
         );
+        if(products == null || products.isEmpty()) {
+            return FetchProductResultDto.builder()
+                    .lastId(0)
+                    .result(List.of())
+                    .build();
+        }
 
-        List<ProductImage> images = imageMapper.findImagesByProductIds(products.stream().map(Product::getId).toList());
-        return products.stream().map(product ->
+        List<ProductImage> images = imageMapper.findImagesByProductIds(products.stream().map(ProductResponseDto::getId).toList());
+        List<ProductAggregate> productAggregateList = products.stream().map(product ->
                 new ProductAggregate(
                         product,
                         false,
                         0,
                         images.stream().filter(image -> image.getType_id() == product.getId()).toList()
                 )).toList();
+
+        return new FetchProductResultDto(productAggregateList, products.get(products.size() - 1).getId());
     }
 
     // 사용자가 등록한 상품 조회
