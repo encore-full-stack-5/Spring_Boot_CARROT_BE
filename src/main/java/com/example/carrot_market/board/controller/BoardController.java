@@ -5,8 +5,10 @@ import com.example.carrot_market.board.dto.AddBoardRequestDto;
 import com.example.carrot_market.board.dto.UpdateBoardRequestDto;
 import com.example.carrot_market.board.dto.getDetailBoardResultDto;
 import com.example.carrot_market.board.service.BoardService;
+import com.example.carrot_market.core.base.BaseResponseEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -51,11 +53,21 @@ public class BoardController {
     }
 
     // 사용자가 작성한 커뮤니티의 정보 수정
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public UpdateBoardRequestDto updateBoard(
             @RequestBody UpdateBoardRequestDto request,
             @PathVariable("id") int id
     ) {
         return boardService.updateBoard(request, id);
+    }
+
+    // 선택한 커뮤니티 삭제
+    @DeleteMapping("/{id}")
+    public ResponseEntity<BaseResponseEntity<?>> deleteAreaFromUser(
+            @PathVariable("id") int id
+    ) {
+        boardService.deleteBoard(id);
+
+        return BaseResponseEntity.ok("success");
     }
 }
