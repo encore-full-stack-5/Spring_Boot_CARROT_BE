@@ -1,14 +1,5 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.carrot_market.chatting.repository.ChattingMapper">
-    <!--
-        chat_rooms
-        id, product_id, seller_id, customer_id, create_at, seller_last_read_chat_id, customer_last_read_chat_id, is_exist_seller, is_exist_customer, last_chat
-    -->
-    <!--
-        chat i
-        id, chat_room_id, sender_user_id, sent_at, message, chat_type
-    -->
-
 
     <insert id="createChatRoom" parameterType="com.example.carrot_market.chatting.domain.ChatRoom" useGeneratedKeys="true"  keyProperty="id">
         INSERT INTO chat_rooms (product_id, seller_id, customer_id, last_chat)
@@ -88,6 +79,7 @@
         </set>
         WHERE Id = ${id}
     </update>
+
     <update id="exitChatRoom" parameterType="com.example.carrot_market.chatting.domain.ChatRoom">
         UPDATE chatting_room
         SET is_exist_seller = #{isExistSeller}, is_exist_customer = #{isExistCustomer}

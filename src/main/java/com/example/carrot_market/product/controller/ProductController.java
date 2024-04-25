@@ -5,8 +5,7 @@ import com.example.carrot_market.core.base.BaseResponseEntity;
 import com.example.carrot_market.product.domain.Product;
 import com.example.carrot_market.product.domain.ProductAggregate;
 import com.example.carrot_market.product.domain.ProductCategory;
-import com.example.carrot_market.product.domain.ProductResponseDto;
-import com.example.carrot_market.product.dto.FetchProductResultDto;
+import com.example.carrot_market.product.dto.FetchProductResult;
 import com.example.carrot_market.product.dto.InsertLikeCountRequestDto;
 import com.example.carrot_market.product.dto.InsertProductRequestDto;
 import com.example.carrot_market.product.dto.UpdateProductRequestDto;
@@ -39,7 +38,7 @@ public class ProductController {
 
     //fetchProducts with cursor paging
     @GetMapping
-    public ResponseEntity<BaseResponseEntity<FetchProductResultDto>> fetchProducts(
+    public ResponseEntity<BaseResponseEntity<FetchProductResult>> fetchProducts(
             @RequestParam("category") int category,
             @RequestParam("area") int area,
             @RequestParam("limit") int limit,

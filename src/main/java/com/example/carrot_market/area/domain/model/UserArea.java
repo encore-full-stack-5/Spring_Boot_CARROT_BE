@@ -1,5 +1,6 @@
 package com.example.carrot_market.area.domain.model;
 
+import com.example.carrot_market.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,9 +12,6 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class UserArea {
-
-//    List<Area> areas;
-//    AreaRange areaRange;
 
     private int userId;
     private int areaId;
@@ -27,4 +25,17 @@ public class UserArea {
     private int isDefault;
     private int areaRange;
 
+    public UserArea(User user, Area area, int areaRange) {
+        this.userId = user.getId();
+        this.areaId = area.getId();
+        this.do_city = area.getDo_city();
+        this.si_gu = area.getSi_gu();
+        this.dong = area.getDong();
+        this.eup = area.getEup();
+        this.ri = area.getRi();
+        this.latitude = area.getLatitude();
+        this.longitude = area.getLongitude();
+        this.isDefault = 1;
+        this.areaRange = areaRange;
+    }
 }
