@@ -2,6 +2,7 @@ package com.example.carrot_market.board.controller;
 
 import com.example.carrot_market.board.domain.model.Board;
 import com.example.carrot_market.board.dto.AddBoardRequestDto;
+import com.example.carrot_market.board.dto.getDetailBoardResultDto;
 import com.example.carrot_market.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class BoardController {
     }
 
     // 사용자가 작성한 커뮤니티 글목록 조회
-    @GetMapping("/{id}")
+    @GetMapping("/user/{id}")
     public List<Board> getBoardListByUserId(
             @PathVariable("id") int userId
     ) {
@@ -38,5 +39,13 @@ public class BoardController {
             @PathVariable("id") int areaId
     ) {
         return boardService.getBoardListByAreaId(areaId);
+    }
+
+    // 선택한 커뮤니티의 정보 조회
+    @GetMapping("/board/{id}")
+    public getDetailBoardResultDto getDetailBoard(
+            @PathVariable("id") int boardId
+    ) {
+        return boardService.getDetailBoard(boardId);
     }
 }
