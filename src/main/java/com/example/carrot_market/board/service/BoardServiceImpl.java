@@ -34,9 +34,10 @@ public class BoardServiceImpl implements BoardService {
         return boardMapper.getBoardListByUserId(userId);
     }
 
+    // 설정한 지역의 커뮤니티 글목록 전체 조회
     @Override
     public List<Board> getBoardListByAreaId(int areaId) {
-        return null;
+        return boardMapper.getBoardListByAreaId(areaId);
     }
 
     @Override

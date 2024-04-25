@@ -31,4 +31,12 @@ public class BoardController {
     ) {
         return boardService.getBoardListByUserId(userId);
     }
+
+    // 설정한 지역의 커뮤니티 글목록 전체 조회
+    @GetMapping("/areas/{id}")
+    public List<Board> getBoardListByAreaId(
+            @PathVariable("id") int areaId
+    ) {
+        return boardService.getBoardListByAreaId(areaId);
+    }
 }
