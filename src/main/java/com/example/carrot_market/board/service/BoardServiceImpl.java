@@ -3,10 +3,8 @@ package com.example.carrot_market.board.service;
 import com.example.carrot_market.board.db.BoardMapper;
 import com.example.carrot_market.board.domain.model.Board;
 import com.example.carrot_market.board.domain.model.Comment;
-import com.example.carrot_market.board.dto.AddBoardRequestDto;
-import com.example.carrot_market.board.dto.AddCommentRequestDto;
-import com.example.carrot_market.board.dto.AddNestedCommentRequestDto;
-import com.example.carrot_market.board.dto.UpdateBoardRequestDto;
+import com.example.carrot_market.board.dto.*;
+import com.example.carrot_market.core.error.CommonError;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -40,14 +39,30 @@ public class BoardServiceImpl implements BoardService {
         return boardMapper.getBoardListByAreaId(areaId);
     }
 
+    // 선택한 커뮤니티의 정보 조회
     @Override
-    public Board getDetailBoard(int boardId) {
-        return null;
+    public getDetailBoardResultDto getDetailBoard(int boardId) {
+        return boardMapper.getDetailBoard(boardId);
     }
 
+    // 사용자가 작성한 커뮤니티의 정보 수정
     @Override
-    public UpdateBoardRequestDto updateBoardByUserId(int userId, int boardId) {
-        return null;
+    public UpdateBoardRequestDto updateBoard(UpdateBoardRequestDto request, int id) {
+        LocalDateTime now = LocalDateTime.now();
+        Timestamp updateAt = Timestamp.valueOf(now);
+        Optional<Board> boardById = boardMapper.selectBoardById(id);
+        if(boardById.isEmpty()) throw new CommonError.Expected.ResourceNotFoundException("no exist board");
+
+        UpdateBoardRequestDto updateData = UpdateBoardRequestDto.builder()
+                .id(request.getId())
+                .content(request.getContent())
+                .title(request.getTitle())
+                .category(request.getCategory())
+                .updateAt(updateAt)
+                .build();
+        System.out.println(updateData.toString());
+        boardMapper.updateBoard(updateData);
+        return updateData;
     }
 
     @Override
