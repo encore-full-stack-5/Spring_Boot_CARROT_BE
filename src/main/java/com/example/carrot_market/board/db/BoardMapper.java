@@ -2,10 +2,12 @@ package com.example.carrot_market.board.db;
 
 import com.example.carrot_market.board.domain.model.Board;
 import com.example.carrot_market.board.dto.AddBoardRequestDto;
+import com.example.carrot_market.board.dto.UpdateBoardRequestDto;
 import com.example.carrot_market.board.dto.getDetailBoardResultDto;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mapper
 public interface BoardMapper {
@@ -20,4 +22,10 @@ public interface BoardMapper {
 
     // 선택한 커뮤니티의 정보 조회
     getDetailBoardResultDto getDetailBoard(int boardId);
+
+    // 단일 커뮤니티 조회
+    Optional<Board> selectBoardById(int id);
+
+    // 사용자가 작성한 커뮤니티의 정보 수정
+    void updateBoard(UpdateBoardRequestDto request);
 }

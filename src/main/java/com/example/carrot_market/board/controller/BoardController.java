@@ -2,6 +2,7 @@ package com.example.carrot_market.board.controller;
 
 import com.example.carrot_market.board.domain.model.Board;
 import com.example.carrot_market.board.dto.AddBoardRequestDto;
+import com.example.carrot_market.board.dto.UpdateBoardRequestDto;
 import com.example.carrot_market.board.dto.getDetailBoardResultDto;
 import com.example.carrot_market.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
@@ -47,5 +48,14 @@ public class BoardController {
             @PathVariable("id") int boardId
     ) {
         return boardService.getDetailBoard(boardId);
+    }
+
+    // 사용자가 작성한 커뮤니티의 정보 수정
+    @PutMapping("/update/{id}")
+    public UpdateBoardRequestDto updateBoard(
+            @RequestBody UpdateBoardRequestDto request,
+            @PathVariable("id") int id
+    ) {
+        return boardService.updateBoard(request, id);
     }
 }

@@ -44,12 +44,12 @@ public interface BoardService {
     getDetailBoardResultDto getDetailBoard(int boardId);
 
     /**
-     * @param userId, boardId
+     * @param request, boardId
      * @return UpdateBoardRequestDto
      *
      * 사용자가 작성한 커뮤니티의 정보를 수정한다.
      */
-    UpdateBoardRequestDto updateBoardByUserId(int userId, int boardId);
+    UpdateBoardRequestDto updateBoard(UpdateBoardRequestDto request, int id);
 
     /**
      * @param boardId
