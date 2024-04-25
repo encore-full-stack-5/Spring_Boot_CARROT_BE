@@ -1,6 +1,7 @@
 package com.example.carrot_market.product.dto;
 
 
+import com.example.carrot_market.product.domain.Product;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -8,7 +9,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
 
-public record InsertProductRequestDto (
+public record InsertProductRequestDto(
 
         @NotNull(message = "userId 파라미터가 누락 되었습니다.")
         int userId,
@@ -25,4 +26,19 @@ public record InsertProductRequestDto (
         @NotNull(message = "isNegotiation 파라미터가 누락 되었습니다.")
         int isNegotiation
 ) {
+
+    public Product toDomain(InsertProductRequestDto dto, int state) {
+        return Product.builder()
+                .id(0)
+                .sellerId(this.userId())
+                .sellingAreaId(this.areaId())
+                .categoryId(this.categoryId())
+                .isNegotiation(this.isNegotiation())
+                .state(state)
+                .title(this.title())
+                .content(this.content())
+                .price(this.price())
+                .build();
+    }
+
 }

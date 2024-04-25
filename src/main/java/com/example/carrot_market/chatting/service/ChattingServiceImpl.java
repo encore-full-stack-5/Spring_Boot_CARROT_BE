@@ -27,29 +27,15 @@ public class ChattingServiceImpl implements ChattingService {
     @Override
     @Transactional
     public ChatRoom createChatRoom(CreateChatRoomRequestDto createChatRoomRequestDto) {
-        ChatRoom room = ChatRoom.builder()
-                .id(0)
-                .productId(createChatRoomRequestDto.getProductId())
-                .sellerId(createChatRoomRequestDto.getSellerId())
-                .customerId(createChatRoomRequestDto.getUserId())
-                .lastChat("채팅방이 생성되었습니다.")
-                .build();
+        ChatRoom room = createChatRoomRequestDto.toDomain();
         chatRoomMapper.createChatRoom(room);
-
         createMessage(new CreateChatDto(1, room.getId(), "채팅방이 생성되었습니다.", ChatType.SYSTEM.getValue()));
         return room;
     }
 
     @Override
     public Chat createMessage(CreateChatDto createChatDto) {
-        Chat chat = Chat.builder()
-                .id(0)
-                .chatRoomId(createChatDto.getRoomId())
-                .senderUserId(createChatDto.getUserId())
-                .message(createChatDto.getMessage())
-                .chatType(createChatDto.getChatType())
-                .sentAt(TimeUtil.getCurrentTimestamp())
-                .build();
+        Chat chat = createChatDto.toDomain();
         chatRoomMapper.createMessage(chat);
         return chat;
     }

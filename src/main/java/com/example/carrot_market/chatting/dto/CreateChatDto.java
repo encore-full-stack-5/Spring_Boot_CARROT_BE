@@ -1,5 +1,7 @@
 package com.example.carrot_market.chatting.dto;
 
+import com.example.carrot_market.chatting.domain.Chat;
+import com.example.carrot_market.core.util.TimeUtil;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,4 +19,16 @@ public class CreateChatDto {
     private String message;
     @NotNull(message = "chatType 파라미터가 누락 되었습니다.")
     private int chatType;
+
+
+    public Chat toDomain() {
+        return Chat.builder()
+                .id(0)
+                .chatRoomId(this.getRoomId())
+                .senderUserId(this.getUserId())
+                .message(this.getMessage())
+                .chatType(this.getChatType())
+                .sentAt(TimeUtil.getCurrentTimestamp())
+                .build();
+    }
 }

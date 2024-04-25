@@ -23,11 +23,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/aop_test")
-    public String dbAccess(@RequestParam("test") String test){
-        return "2342342";
-    }
-
     @PostMapping("/sign_up")
     public ResponseEntity<BaseResponseEntity<UserAggregate>> signUp(@Valid @RequestBody SignUpRequestDto signUpRequest) {
         return BaseResponseEntity.ok(userService.signUp(signUpRequest), "success");
@@ -45,7 +40,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     public User updateUser(@PathVariable("id") int id, @RequestBody UpdateUserRequestDto req){
-        return this.userService.updateUser(id, req);
+        return userService.updateUser(id, req);
     }
 
     @PutMapping("/delete/{id}")
