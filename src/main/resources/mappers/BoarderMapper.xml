@@ -66,4 +66,11 @@
                update_at = #{updateAt}
          WHERE id = #{id}
     </update>
+
+    <!-- 선택한 커뮤니티 삭제 -->
+    <select id="deleteBoard" parameterType="int" resultType="boolean">
+        DELETE
+          FROM boards
+         WHERE id = #{id}
+    </select>
 </mapper>

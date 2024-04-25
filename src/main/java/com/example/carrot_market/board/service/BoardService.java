@@ -69,12 +69,12 @@ public interface BoardService {
     void unLikeBoard(int boardId);
 
     /**
-     * @param boardId
+     * @param id
      * @return Board
      *
      * 커뮤니티 글을 삭제한다.
      */
-    Board deleteBoard(int boardId);
+    void deleteBoard(int id);
 
     /**
      * @param addCommentRequestDto, boardId, userId
