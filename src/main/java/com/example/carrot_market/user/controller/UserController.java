@@ -30,11 +30,11 @@ public class UserController {
 
     @PostMapping("/sign_up")
     public ResponseEntity<BaseResponseEntity<UserAggregate>> signUp(@Valid @RequestBody SignUpRequestDto signUpRequest) {
-        return BaseResponseEntity.ok(userService.singUp(signUpRequest), "success");
+        return BaseResponseEntity.ok(userService.signUp(signUpRequest), "success");
     }
 
     @PostMapping("/sign_in")
-    public ResponseEntity<BaseResponseEntity<UserAggregate>> signIn(@Valid @RequestBody SignInResponseDto signInResponseDto) {
+    public ResponseEntity<BaseResponseEntity<UserAggregate>> signIn( @RequestBody SignInResponseDto signInResponseDto) {
         return BaseResponseEntity.ok(userService.singIn(signInResponseDto), "success");
     }
 

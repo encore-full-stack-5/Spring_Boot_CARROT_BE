@@ -7,6 +7,7 @@ import com.example.carrot_market.product.domain.ProductAggregate;
 import com.example.carrot_market.product.domain.ProductCategory;
 import com.example.carrot_market.product.dto.InsertLikeCountRequestDto;
 import com.example.carrot_market.product.dto.InsertProductRequestDto;
+import com.example.carrot_market.product.dto.UpdateProductRequestDto;
 import com.example.carrot_market.product.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -25,6 +26,7 @@ public class ProductController {
 
     @Autowired
     private final ProductService productService;
+
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<BaseResponseEntity<Product>> addProduct(
             @Valid @RequestPart(value = "product") InsertProductRequestDto dto,
@@ -60,6 +62,15 @@ public class ProductController {
         return BaseResponseEntity.ok("success");
     }
 
+    // 사용자가 등록한 상품 조회
+    @GetMapping("userProducts/{id}")
+    public List<Product> getProductsByUserId(
+            @PathVariable("id") int userId,
+            @RequestParam(value="offset", required=false, defaultValue="0") int offset,
+            @RequestParam(value="limit", required=false, defaultValue="5") int limit
+    ) {
+        return productService.getProductsByUserId(userId, offset, limit);
+    }
 
     @PostMapping("/like_count")
     public void likeProduct(@RequestBody InsertLikeCountRequestDto req) {
@@ -77,4 +88,25 @@ public class ProductController {
         return productService.selectProductById(productId);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateProduct(@PathVariable("id") int id, @RequestBody UpdateProductRequestDto req) {
+        productService.updateProduct(id,req);
+        return BaseResponseEntity.ok("success");
+    }
+
+    // 상품 조회수
+    @PutMapping("view/{id}")
+    public boolean increaseViewCount(
+            @PathVariable("id") int productId
+    ) {
+        return productService.increaseViewCount(productId);
+    }
+
+    // 상품 끌어올리기
+    @PutMapping("refresh/{id}")
+    public void refreshProduct(
+            @PathVariable("id") int productId
+    ) {
+        productService.refreshProduct(productId);
+    }
 }

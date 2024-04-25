@@ -8,12 +8,6 @@
         VALUES (#{title}, #{state}, #{sellingAreaId}, #{sellerId}, #{price}, #{likeCount}, #{isNegotiation}, #{content}, #{categoryId})
     </insert>
 
-    <select id="selectProductById" parameterType="int" resultType="com.example.carrot_market.product.domain.Product">
-        SELECT *
-          FROM products
-         WHERE id = #{productId}
-    </select>
-
     <select id="findProductsByCategoryAndArea" resultType="com.example.carrot_market.product.domain.Product">
         SELECT p.*
         FROM products p
@@ -41,13 +35,21 @@
         SELECT * FROM product_categories
     </select>
 
+    <select id="getProductByUserId" parameterType="int" resultType="com.example.carrot_market.product.domain.Product">
+        SELECT p.*
+          FROM products   p
+          JOIN users      u
+            ON u.id     = p.seller_id
+         WHERE u.id     = #{userId}
+         LIMIT #{limit}
+        OFFSET #{offset}
+    </select>
+
     <update id="updateProductStatus">
         UPDATE products
         SET state = #{state}
         WHERE id = #{id}
     </update>
-
-
 
     <select id="selectLike" parameterType="com.example.carrot_market.product.dto.InsertLikeCountRequestDto">
         SELECT
@@ -84,7 +86,14 @@
         WHERE id = #{id}
     </update>
 
-
+    <select id="selectProductById" resultType="com.example.carrot_market.product.domain.Product" >
+        SELECT
+            *
+        FROM
+            products
+        WHERE
+            id=#{id}
+    </select>
 
     <!-- 상품 삭제 -->
     <update id="deleteProduct" parameterType="com.example.carrot_market.product.domain.Product">
@@ -97,11 +106,17 @@
         SELECT name FROM product_categories WHERE id=#{categoryId}
     </select>
 
+    <!-- 상품 조회수 -->
+    <update id="increaseViewCount" parameterType="int">
+        UPDATE products
+           SET view_count = view_count + 1
+         WHERE id = #{productId}
+    </update>
 
-
-
-
-
-
-
+    <!-- 상품 끌올 -->
+    <update id="refreshProduct" parameterType="int">
+        UPDATE products
+           SET refreshed_at = now()
+         WHERE id = #{productId}
+    </update>
 </mapper>

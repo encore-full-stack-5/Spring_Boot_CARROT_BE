@@ -2,6 +2,7 @@ package com.example.carrot_market.chatting.controller;
 
 import com.example.carrot_market.chatting.domain.Chat;
 import com.example.carrot_market.chatting.domain.ChatRoom;
+import com.example.carrot_market.chatting.domain.ChatRoomAggregate;
 import com.example.carrot_market.chatting.dto.CreateChatDto;
 import com.example.carrot_market.chatting.dto.CreateChatRoomRequestDto;
 import com.example.carrot_market.chatting.dto.UpdateChatRoomRequestDto;
@@ -36,7 +37,7 @@ public class ChattingController {
     }
 
     @GetMapping("/users/{userId}/rooms")
-    public ResponseEntity<BaseResponseEntity<List<ChatRoom>>> getRoomListByUserId(@PathVariable("userId") int userId) {
+    public ResponseEntity<BaseResponseEntity<List<ChatRoomAggregate>>> getRoomListByUserId(@PathVariable("userId") int userId) {
         return BaseResponseEntity.ok(chattingService.getChatRoomListByUserId(userId), "success");
     }
 

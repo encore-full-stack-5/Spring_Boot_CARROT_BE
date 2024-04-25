@@ -58,17 +58,19 @@ public class ProductServiceImpl implements ProductService {
             InsertProductRequestDto insertProductRequestDto,
             MultipartFile[] files
     ) {
-        Product product = makeProductByDto(insertProductRequestDto);
+        Product product = makeProductByDto(insertProductRequestDto, 1);
         productMapper.insertProduct(product);
         if (files == null) {
             return product;
         }
+        productMapper.insertProduct(product);
         return createProductWithImages(product, files);
     }
 
     @Override
-    public Product updateProduct(UpdateProductRequestDto updateProductRequestDto) {
-        return null;
+    public void updateProduct(int id, UpdateProductRequestDto req) {
+        Product product = req.toEntity(id);
+        productMapper.updateProduct(product);
     }
 
     @Override
@@ -77,8 +79,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product refreshProduct(int productId) {
-        return null;
+    public void refreshProduct(int productId) {
+        productMapper.refreshProduct(productId);
     }
 
     @Transactional
@@ -107,9 +109,10 @@ public class ProductServiceImpl implements ProductService {
                 )).toList();
     }
 
+    // 사용자가 등록한 상품 조회
     @Override
     public List<Product> getProductsByUserId(int userId, int offset, int limit) {
-        return null;
+        return productMapper.getProductByUserId(userId, offset, limit);
     }
 
     // 상품 삭제
@@ -119,7 +122,7 @@ public class ProductServiceImpl implements ProductService {
         Timestamp deletedAt = Timestamp.valueOf(now);
         Optional<Product> productById = productMapper.selectProductById(productId);
         // productId 유무
-        if(productById.isEmpty()) throw new CommonError.Expected.ResourceNotFoundException("no exist product");
+        if (productById.isEmpty()) throw new CommonError.Expected.ResourceNotFoundException("no exist product");
 
         Product getProduct = productById.get();
         Product product = Product.builder()
@@ -149,8 +152,9 @@ public class ProductServiceImpl implements ProductService {
 //        Optional<User> user = userMapper.selectUserById(req.userId());
 //        if(user.isEmpty()) throw new CommonError.Expected.ResourceNotFoundException("no exist user");
         Optional<Like> likeExist = productMapper.selectLike(req);
-        if(!likeExist.isEmpty()) {likeProductCancel(req);}
-        else {
+        if (!likeExist.isEmpty()) {
+            likeProductCancel(req);
+        } else {
             LocalDateTime now = LocalDateTime.now();
             Timestamp timestamp = Timestamp.valueOf(now);
             // 상품의 type 은 1 이라고 가정
@@ -174,9 +178,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
 
+    // 상품 조회수
     @Override
     public boolean increaseViewCount(int productId) {
-        return false;
+        return productMapper.increaseViewCount(productId);
     }
 
     @Override
@@ -186,7 +191,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private Product createProductWithImages(Product product, MultipartFile[] images) {
-        List<CompletableFuture<Boolean>> uploadFutures = new ArrayList<>();
+//        List<CompletableFuture<Boolean>> uploadFutures = new ArrayList<>();
+        List<Boolean> uploadFutures = new ArrayList<>();
         for (MultipartFile file : images) {
             String imageFileName = makeProductImageName(file, product.getId());
             ProductImage image = ProductImage.builder()
@@ -196,21 +202,27 @@ public class ProductServiceImpl implements ProductService {
                     .file_path(imageFileName)
                     .build();
             imageMapper.insertProductImage(image);
-            CompletableFuture<Boolean> future = uploadFileToS3(file, imageFileName);
+//            CompletableFuture<Boolean> future = uploadFileToS3(file, imageFileName);
+            Boolean future = uploadFileToS3Sync(file, imageFileName);
             uploadFutures.add(future);
         }
 
-        CompletableFuture<Void> allUploads = CompletableFuture.allOf(uploadFutures.toArray(new CompletableFuture[0]));
-        allUploads.thenRunAsync(() -> {
-            List<Boolean> results = uploadFutures.stream()
-                    .map(CompletableFuture::join)
-                    .toList();
-            if (results.contains(false)) {
-                productMapper.updateProductStatus(product.getId(), 5);
-            } else {
-                productMapper.updateProductStatus(product.getId(), 1);
-            }
-        });
+
+//        CompletableFuture<Void> allUploads = CompletableFuture.allOf(uploadFutures.toArray(new CompletableFuture[0]));
+//        allUploads.thenRunAsync(() -> {
+//            List<Boolean> results = uploadFutures.stream()
+//                    .map(CompletableFuture::join)
+//                    .toList();
+//            if (results.contains(false)) {
+//                productMapper.updateProductStatus(product.getId(), 5);
+//            } else {
+//                productMapper.updateProductStatus(product.getId(), 1);
+//            }
+//        });
+//
+        if(uploadFutures.contains(false)) {
+            throw new CommonError.Unexpected.ServerError("이미지 업로드에 실패하였습니다.");
+        }
 
         return product;
     }
@@ -219,14 +231,14 @@ public class ProductServiceImpl implements ProductService {
         return imageMapper.findImageByTypeAndTypeId(type, typeId);
     }
 
-    private static Product makeProductByDto(InsertProductRequestDto dto) {
+    private static Product makeProductByDto(InsertProductRequestDto dto, int state) {
         return Product.builder()
                 .id(0)
                 .sellerId(dto.userId())
                 .sellingAreaId(dto.areaId())
                 .categoryId(dto.categoryId())
                 .isNegotiation(dto.isNegotiation())
-                .state(4)
+                .state(state)
                 .title(dto.title())
                 .content(dto.content())
                 .price(dto.price())
@@ -238,7 +250,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Async
-    private CompletableFuture<Boolean> uploadFileToS3(MultipartFile file, String imageFileName) {
+    public CompletableFuture<Boolean> uploadFileToS3(MultipartFile file, String imageFileName) {
         try {
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentLength(file.getSize());
@@ -277,4 +289,18 @@ public class ProductServiceImpl implements ProductService {
                 );
     }
 
+    public boolean uploadFileToS3Sync(MultipartFile file, String imageFileName) {
+        try {
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentLength(file.getSize());
+            metadata.setContentType(file.getContentType());
+            s3client.putObject(new PutObjectRequest("carrotmarket", imageFileName, file.getInputStream(), metadata));
+            return true;
+        } catch (IOException e) {
+            return false;
+        } catch (Exception e) {
+            System.err.println("Error uploading file to S3: " + e.getMessage());
+            return false;
+        }
+    }
 }

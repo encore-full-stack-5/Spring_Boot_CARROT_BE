@@ -27,10 +27,10 @@ public interface ProductService {
     /**
      * 상품을 수정한다. 덮어쓰기 형식
      *
-     * @param updateProductRequestDto
+     * @param req
      * @return
      */
-    Product updateProduct(UpdateProductRequestDto updateProductRequestDto);
+    void updateProduct(int id, UpdateProductRequestDto req);
 
 
     List<ProductCategory> getProductCategories();
@@ -40,7 +40,7 @@ public interface ProductService {
      * @param productId
      * @return
      */
-    Product refreshProduct(int productId);
+    void refreshProduct(int productId);
 
     /**
      * 상품을 조회한다.
@@ -83,7 +83,7 @@ public interface ProductService {
     // 상품찜 취소
     void likeProductCancel(InsertLikeCountRequestDto req);
 
-    // 상품 조회수 올리기
+    // 상품 조회수
     boolean increaseViewCount(int productId);
 
     void updateProductStatus(int id, int state);

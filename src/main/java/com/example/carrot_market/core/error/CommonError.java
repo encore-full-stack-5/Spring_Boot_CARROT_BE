@@ -98,6 +98,11 @@ public abstract class CommonError extends RuntimeException {
             public IllegalArgumentException(String message) {super(message, HttpStatus.INTERNAL_SERVER_ERROR);}
             public IllegalArgumentException() {super("부적절한 인자가 전달되었습니다.", HttpStatus.INTERNAL_SERVER_ERROR);}
         }
+
+        public static class ServerError extends Unexpected {
+            public ServerError(String message) {super(message, HttpStatus.INTERNAL_SERVER_ERROR);}
+            public ServerError() {super("서버 오류입니다.", HttpStatus.INTERNAL_SERVER_ERROR);}
+        }
     }
 
     public ResponseEntity<BaseResponseEntity<?>> convertResponse() {

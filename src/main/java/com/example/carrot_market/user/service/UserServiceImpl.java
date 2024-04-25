@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserAggregate singUp(SignUpRequestDto singUpRequestDto) {
+    public UserAggregate signUp(SignUpRequestDto singUpRequestDto) {
 
         userMapper.selectUserByPhone(singUpRequestDto.getPhone()).ifPresent(user1 -> {
                     throw new CommonError.Expected.ResourceNotFoundException("이미 회원 가입이 되어있는 번호입니다.");
@@ -52,19 +52,27 @@ public class UserServiceImpl implements UserService {
 
         Area area = areaService.selectAreaById(singUpRequestDto.getAreaId());
 
-        UserArea userArea = getUserArea(singUpRequestDto, area);
+        UserArea userArea = getUserArea(user, area, singUpRequestDto);
 
         return UserAggregate.builder()
                 .user(user)
-                .userArea(userArea)
+                .userArea(List.of(userArea))
                 .build();
     }
 
-    private UserArea getUserArea(SignUpRequestDto singUpRequestDto, Area area) {
+    private UserArea getUserArea(User user, Area area, SignUpRequestDto singUpRequestDto) {
         return UserArea.builder()
-                .areas(List.of(area))
-                .defaultAreaId(area.getId())
-                .currentRange(AreaRange.convertIDToAreaRange(singUpRequestDto.getAreaRange()))
+                .userId(user.getId())
+                .areaId(singUpRequestDto.getAreaId())
+                .do_city(area.getDo_city())
+                .si_gu(area.getSi_gu())
+                .dong(area.getDong())
+                .eup(area.getEup())
+                .ri(area.getRi())
+                .latitude(area.getLatitude())
+                .longitude(area.getLongitude())
+                .isDefault(1)
+                .areaRange(singUpRequestDto.getAreaRange())
                 .build();
     }
 
@@ -83,7 +91,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserAggregate singIn(SignInResponseDto signInResponseDto) {
-        return null;
+
+        log.error("signInResponseDto : {}", signInResponseDto.getPhone());
+        User user = userMapper.selectUserByPhone(signInResponseDto.getPhone()).orElseThrow(() -> {
+            throw new CommonError.Expected.ResourceNotFoundException("회원정보가 존재하지 않습니다.");
+        });
+
+
+        List<UserArea> areas = areaService.getAreaListByUserId(user.getId());
+        return UserAggregate.builder()
+                .user(user)
+                .userArea(areas)
+                .build();
     }
     @Override
     public User updateUser(int id, UpdateUserRequestDto updateUserRequestDto){
