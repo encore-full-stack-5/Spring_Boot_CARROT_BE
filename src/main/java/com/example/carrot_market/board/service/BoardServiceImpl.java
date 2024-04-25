@@ -28,9 +28,10 @@ public class BoardServiceImpl implements BoardService {
         boardMapper.insertBoard(request);
     }
 
+    // 사용자가 작성한 커뮤니티 글목록 조회
     @Override
     public List<Board> getBoardListByUserId(int userId) {
-        return null;
+        return boardMapper.getBoardListByUserId(userId);
     }
 
     @Override
