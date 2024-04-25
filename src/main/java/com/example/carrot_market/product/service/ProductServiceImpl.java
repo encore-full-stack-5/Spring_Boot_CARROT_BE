@@ -102,8 +102,8 @@ public class ProductServiceImpl implements ProductService {
         }
 
         List<ProductImage> images = imageMapper.findImagesByProductIds(products.stream().map(ProductResponseDto::getId).toList());
-        List<ProductAggregate> productAggregateList = products.stream().map(product ->
-                new ProductAggregate(
+        List<FetchProductDto> productAggregateList = products.stream().map(product ->
+                new FetchProductDto(
                         product,
                         false,
                         0,

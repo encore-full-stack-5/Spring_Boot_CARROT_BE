@@ -1,5 +1,6 @@
 package com.example.carrot_market.product.dto;
 
+import com.example.carrot_market.product.domain.FetchProductDto;
 import com.example.carrot_market.product.domain.ProductAggregate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class FetchProductResultDto {
-    List<ProductAggregate> result;
+    List<FetchProductDto> result;
     int lastId;
 }
