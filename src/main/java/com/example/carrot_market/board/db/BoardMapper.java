@@ -29,4 +29,7 @@ public interface BoardMapper {
 
     // 사용자가 작성한 커뮤니티의 정보 수정
     void updateBoard(UpdateBoardRequestDto request);
+
+    // 선택한 커뮤니티 삭제
+    void deleteBoard(int id);
 }

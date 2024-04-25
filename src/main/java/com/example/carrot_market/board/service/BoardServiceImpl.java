@@ -80,9 +80,10 @@ public class BoardServiceImpl implements BoardService {
 
     }
 
+    // 선택한 커뮤니티 삭제
     @Override
-    public Board deleteBoard(int boardId) {
-        return null;
+    public void deleteBoard(int id) {
+        boardMapper.deleteBoard(id);
     }
 
     @Override
