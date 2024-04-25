@@ -93,6 +93,10 @@
            AND ua.is_default = 1
     </select>
 
+    <select id="getAreaName" parameterType="int" resultType="com.example.carrot_market.area.domain.model.Area">
+        SELECT * FROM areas WHERE id=#{areaId}
+    </select>
+
     <update id="updateUserArea">
         UPDATE user_area
            SET area_id = #{areaId},
@@ -101,6 +105,7 @@
          WHERE user_id = #{userId}
            AND area_id = #{orgAreaId}
     </update>
+
     <update id="updateUserOtherArea">
         UPDATE user_area
            SET is_default = 0

@@ -1,9 +1,10 @@
 package com.example.carrot_market.product.service;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.example.carrot_market.area.db.AreaMapper;
+import com.example.carrot_market.area.domain.model.Area;
 import com.example.carrot_market.area.domain.model.AreaRange;
 import com.example.carrot_market.core.error.CommonError;
 import com.example.carrot_market.product.domain.*;
@@ -18,7 +19,6 @@ import com.example.carrot_market.product.dto.UpdateProductRequestDto;
 import com.example.carrot_market.product.repository.ImageMapper;
 import com.example.carrot_market.product.repository.ProductMapper;
 import com.example.carrot_market.user.db.UserMapper;
-import com.example.carrot_market.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,18 +27,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.awt.*;
-import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 @Log4j2
 @AllArgsConstructor
@@ -53,6 +48,9 @@ public class ProductServiceImpl implements ProductService {
     private final AmazonS3 s3client;
     @Autowired
     private final ImageMapper imageMapper;
+
+    @Autowired
+    private final AreaMapper areaMapper;
 
     @Override
     @Transactional
@@ -97,12 +95,17 @@ public class ProductServiceImpl implements ProductService {
         );
 
         List<ProductImage> images = imageMapper.findImagesByProductIds(products.stream().map(Product::getId).toList());
+
         return products.stream().map(product ->
                 new ProductAggregate(
                         product,
                         false,
                         0,
-                        images.stream().filter(image -> image.getType_id() == product.getId()).toList()
+                        images.stream().filter(image -> image.getType_id() == product.getId()).toList(),
+                        "ksh",
+                        null,
+                        123,
+                        null
                 )).toList();
     }
 
@@ -260,6 +263,30 @@ public class ProductServiceImpl implements ProductService {
             System.err.println("Error uploading file to S3: " + e.getMessage());
             return CompletableFuture.completedFuture(false);
         }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ProductAggregate selectProductById(int productId) {
+        Optional<Product> product = productMapper.selectProductById(productId);
+        if(product.isEmpty()) throw new CommonError.Expected.ResourceNotFoundException("no exist product");
+
+        List<ProductImage> images = imageMapper.findImagesByProductIdOne(productId);
+        Optional<String> nickname = userMapper.getNickname(product.get().getSellerId());
+        double userScore = userMapper.getUserScore(product.get().getSellerId());
+        if(nickname.isEmpty()) throw new CommonError.Expected.ResourceNotFoundException("no exist user");
+        Optional<Area> areaName = areaMapper.getAreaName(product.get().getSellingAreaId());
+        String categoryName = productMapper.getCategoryName(product.get().getCategoryId());
+        return new ProductAggregate(
+                        product.get(),
+                        false,
+                        0,
+                        images.stream().toList(),
+                        nickname.get(),
+                        areaName.get(),
+                        userScore,
+                        categoryName
+                );
     }
 
     public boolean uploadFileToS3Sync(MultipartFile file, String imageFileName) {

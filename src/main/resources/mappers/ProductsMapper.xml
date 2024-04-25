@@ -102,6 +102,10 @@
          WHERE id = #{id}
     </update>
 
+    <select id="getCategoryName" parameterType="int">
+        SELECT name FROM product_categories WHERE id=#{categoryId}
+    </select>
+
     <!-- 상품 조회수 -->
     <update id="increaseViewCount" parameterType="int">
         UPDATE products
