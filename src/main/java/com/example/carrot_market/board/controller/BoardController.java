@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1/boards")
@@ -63,10 +64,18 @@ public class BoardController {
         return boardService.updateBoard(request, id);
     }
 
+    // 커뮤니티 조회수
+    @PutMapping("/view/{id}")
+    public boolean increaseBoardViewCount(
+            @PathVariable("id") int boardId
+    ) {
+        return boardService.increaseBoardViewCount(boardId);
+    }
+
     // 선택한 커뮤니티 삭제
     @DeleteMapping("/{id}")
-    public ResponseEntity<BaseResponseEntity<?>> deleteAreaFromUser(
-            @PathVariable("id") int id
+    public ResponseEntity<BaseResponseEntity<?>> deleteBoard(
+            @PathVariable("id") int id // boardId
     ) {
         boardService.deleteBoard(id);
 
@@ -84,7 +93,7 @@ public class BoardController {
 
     // 단일 댓글 조회
     @GetMapping("/comment/{id}")
-    public Comment selectCommentById(
+    public Optional<Comment> selectCommentById(
             @PathVariable("id") int id // commentId
     ) {
         return boardService.selectCommentById(id);
@@ -96,5 +105,15 @@ public class BoardController {
             @PathVariable("id") int boardId
     ) {
         return boardService.getCommentsByBoardId(boardId);
+    }
+  
+    // 댓글 삭제
+    @DeleteMapping("/comment/{id}")
+    public ResponseEntity<BaseResponseEntity<?>> deleteComment(
+            @PathVariable("id") int id // commentId
+    ) {
+        boardService.deleteComment(id);
+
+        return BaseResponseEntity.ok("success");
     }
 }

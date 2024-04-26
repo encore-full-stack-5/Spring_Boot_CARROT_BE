@@ -96,7 +96,7 @@ public class ProductController {
     }
 
     // 상품 조회수
-    @PutMapping("view/{id}")
+    @PutMapping("/view/{id}")
     public boolean increaseViewCount(
             @PathVariable("id") int productId
     ) {
@@ -104,7 +104,7 @@ public class ProductController {
     }
 
     // 상품 끌어올리기
-    @PutMapping("refresh/{id}")
+    @PutMapping("/refresh/{id}")
     public void refreshProduct(
             @PathVariable("id") int productId
     ) {

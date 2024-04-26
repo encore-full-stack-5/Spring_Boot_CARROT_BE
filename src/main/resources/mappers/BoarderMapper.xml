@@ -67,11 +67,24 @@
          WHERE id = #{id}
     </update>
 
+    <!-- 커뮤니티 조회수 -->
+    <update id="increaseBoardViewCount" parameterType="int">
+        UPDATE boards
+           SET view_count = view_count + 1
+         WHERE id = #{boardId}
+    </update>
+
     <!-- 선택한 커뮤니티 삭제 -->
     <select id="deleteBoard" parameterType="int" resultType="boolean">
         DELETE
           FROM boards
          WHERE id = #{id}
+    </select>
+    <!-- 선택한 커뮤니티의 댓글도 함께 삭제 -->
+    <select id="deleteBoardWithComment" parameterType="int" resultType="boolean">
+        DELETE
+          FROM comments
+         WHERE board_id = #{id}
     </select>
 
     <!-- 댓글 작성 -->
@@ -98,5 +111,12 @@
           JOIN areas a  ON a.id = c.area_id
           JOIN boards b ON b.id = c.board_id
          WHERE b.id = #{boardId}
+    </select>
+
+    <!-- 댓글 삭제 -->
+    <select id="deleteComment" parameterType="int" resultType="boolean">
+        DELETE
+        FROM comments
+        WHERE id = #{id}
     </select>
 </mapper>

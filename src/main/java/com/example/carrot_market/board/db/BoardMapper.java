@@ -10,7 +10,6 @@ import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 import java.util.Optional;
-import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface BoardMapper {
@@ -32,15 +31,23 @@ public interface BoardMapper {
     // 사용자가 작성한 커뮤니티의 정보 수정
     void updateBoard(UpdateBoardRequestDto request);
 
+    // 커뮤니티 조회수
+    boolean increaseBoardViewCount(int boardId);
+
     // 선택한 커뮤니티 삭제
     void deleteBoard(int id);
+    // 선택한 커뮤니티의 댓글도 함께 삭제
+    void deleteBoardWithComment(int id);
   
     // 댓글 작성
     void insertComment(AddCommentRequestDto addCommentRequestDto);
 
     // 단일 댓글 조회
-    Comment selectCommentById(int id);
+    Optional<Comment> selectCommentById(int id);
 
     // 커뮤니티 내 댓글 조회
     List<Comment> getCommentsByBoardId(int boardId);
+
+    // 댓글 삭제
+    void deleteComment(int id);
 }
