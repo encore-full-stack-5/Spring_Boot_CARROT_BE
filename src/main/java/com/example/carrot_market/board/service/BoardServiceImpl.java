@@ -5,6 +5,8 @@ import com.example.carrot_market.board.domain.model.Board;
 import com.example.carrot_market.board.domain.model.Comment;
 import com.example.carrot_market.board.dto.*;
 import com.example.carrot_market.core.error.CommonError;
+import com.example.carrot_market.user.db.UserMapper;
+import com.example.carrot_market.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,8 @@ public class BoardServiceImpl implements BoardService {
 
     @Autowired
     private final BoardMapper boardMapper;
+    @Autowired
+    private final UserMapper userMapper;
 
     // 커뮤니티 글 작성
     @Override
@@ -65,9 +69,13 @@ public class BoardServiceImpl implements BoardService {
         return updateData;
     }
 
+    // 커뮤니티 조회수
     @Override
     public boolean increaseBoardViewCount(int boardId) {
-        return false;
+        Optional<Board> boardById = boardMapper.selectBoardById(boardId);
+        if(boardById.isEmpty()) throw new CommonError.Expected.ResourceNotFoundException("no exist board");
+        
+        return boardMapper.increaseBoardViewCount(boardId);
     }
 
     @Override

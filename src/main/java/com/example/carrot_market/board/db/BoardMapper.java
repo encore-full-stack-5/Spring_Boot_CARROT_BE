@@ -32,6 +32,9 @@ public interface BoardMapper {
     // 사용자가 작성한 커뮤니티의 정보 수정
     void updateBoard(UpdateBoardRequestDto request);
 
+    // 커뮤니티 조회수
+    boolean increaseBoardViewCount(int boardId);
+
     // 선택한 커뮤니티 삭제
     void deleteBoard(int id);
   

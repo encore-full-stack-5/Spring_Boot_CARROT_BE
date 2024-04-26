@@ -8,6 +8,7 @@ import com.example.carrot_market.area.domain.model.Area;
 import com.example.carrot_market.area.domain.model.AreaRange;
 import com.example.carrot_market.core.error.CommonError;
 import com.example.carrot_market.product.domain.*;
+import com.example.carrot_market.product.domain.ProductResponseDto;
 import com.example.carrot_market.product.dto.*;
 import com.example.carrot_market.product.domain.Product;
 import com.example.carrot_market.product.domain.ProductAggregate;
