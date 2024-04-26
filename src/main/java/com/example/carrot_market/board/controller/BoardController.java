@@ -63,6 +63,14 @@ public class BoardController {
         return boardService.updateBoard(request, id);
     }
 
+    // 커뮤니티 조회수
+    @PutMapping("/view/{id}")
+    public boolean increaseBoardViewCount(
+            @PathVariable("id") int boardId
+    ) {
+        return boardService.increaseBoardViewCount(boardId);
+    }
+
     // 선택한 커뮤니티 삭제
     @DeleteMapping("/{id}")
     public ResponseEntity<BaseResponseEntity<?>> deleteAreaFromUser(
