@@ -73,4 +73,10 @@
           FROM boards
          WHERE id = #{id}
     </select>
+
+    <!-- 댓글 작성 -->
+    <insert id="insertComment">
+        INSERT INTO comments (board_id, user_id, area_id, content)
+              VALUE (#{boardId}, #{userId}, #{areaId}, #{content})
+    </insert>
 </mapper>

@@ -86,9 +86,10 @@ public class BoardServiceImpl implements BoardService {
         boardMapper.deleteBoard(id);
     }
 
+    // 댓글 작성
     @Override
-    public Comment insertComment(AddCommentRequestDto addCommentRequestDto, int boardId, int userId) {
-        return null;
+    public void insertComment(AddCommentRequestDto addCommentRequestDto) {
+        boardMapper.insertComment(addCommentRequestDto);
     }
 
     @Override
