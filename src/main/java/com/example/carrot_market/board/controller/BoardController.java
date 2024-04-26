@@ -1,7 +1,9 @@
 package com.example.carrot_market.board.controller;
 
 import com.example.carrot_market.board.domain.model.Board;
+import com.example.carrot_market.board.domain.model.Comment;
 import com.example.carrot_market.board.dto.AddBoardRequestDto;
+import com.example.carrot_market.board.dto.AddCommentRequestDto;
 import com.example.carrot_market.board.dto.UpdateBoardRequestDto;
 import com.example.carrot_market.board.dto.getDetailBoardResultDto;
 import com.example.carrot_market.board.service.BoardService;
@@ -69,5 +71,13 @@ public class BoardController {
         boardService.deleteBoard(id);
 
         return BaseResponseEntity.ok("success");
+    }
+
+    // 댓글 작성
+    @PostMapping("/comment")
+    public void insertComment(
+            @RequestBody AddCommentRequestDto addCommentRequestDto
+    ) {
+        boardService.insertComment(addCommentRequestDto);
     }
 }
