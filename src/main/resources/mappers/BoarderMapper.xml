@@ -73,4 +73,30 @@
           FROM boards
          WHERE id = #{id}
     </select>
+
+    <!-- 댓글 작성 -->
+    <insert id="insertComment">
+        INSERT INTO comments (board_id, user_id, area_id, content)
+              VALUE (#{boardId}, #{userId}, #{areaId}, #{content})
+    </insert>
+
+    <!-- 단일 댓글 조회 -->
+    <select id="selectCommentById" parameterType="int" resultType="com.example.carrot_market.board.domain.model.Comment">
+        SELECT *
+          FROM comments
+         WHERE id = #{id}
+    </select>
+
+    <!-- 커뮤니티 내 댓글 조회 -->
+    <select id="getCommentsByBoardId" parameterType="int" resultType="com.example.carrot_market.board.domain.model.Comment">
+        SELECT C.*,
+               u.nickname AS userNm,
+               u.profile_image AS userImage,
+               a.dong AS areaNm
+          FROM comments c
+          JOIN users u  ON u.id = c.user_id
+          JOIN areas a  ON a.id = c.area_id
+          JOIN boards b ON b.id = c.board_id
+         WHERE b.id = #{boardId}
+    </select>
 </mapper>

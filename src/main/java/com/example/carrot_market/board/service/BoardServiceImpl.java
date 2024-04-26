@@ -86,9 +86,20 @@ public class BoardServiceImpl implements BoardService {
         boardMapper.deleteBoard(id);
     }
 
+    // 댓글 작성
     @Override
-    public Comment insertComment(AddCommentRequestDto addCommentRequestDto, int boardId, int userId) {
-        return null;
+    public void insertComment(AddCommentRequestDto addCommentRequestDto) {
+        boardMapper.insertComment(addCommentRequestDto);
+    }
+
+    // 단일 댓글 조회
+    public Comment selectCommentById(int id) {
+        return boardMapper.selectCommentById(id);
+    }
+
+    // 커뮤니티 내 댓글 조회
+    public List<Comment> getCommentsByBoardId(int boardId) {
+        return boardMapper.getCommentsByBoardId(boardId);
     }
 
     @Override

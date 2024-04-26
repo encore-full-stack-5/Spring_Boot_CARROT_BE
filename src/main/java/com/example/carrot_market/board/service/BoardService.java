@@ -77,16 +77,20 @@ public interface BoardService {
     void deleteBoard(int id);
 
     /**
-     * @param addCommentRequestDto, boardId, userId
+     * @param addCommentRequestDto
      * @return Comment
      *
      * 커뮤니티 글에 댓글을 작성한다.
      */
-    Comment insertComment(
-            AddCommentRequestDto addCommentRequestDto,
-            int boardId,
-            int userId
+    void insertComment(
+            AddCommentRequestDto addCommentRequestDto
     );
+
+    // 단일 댓글 조회
+    Comment selectCommentById(int id);
+
+    // 커뮤니티 내 댓글 조회
+    List<Comment> getCommentsByBoardId(int boardId);
 
     /**
      * @param boardId, commentId, userId

@@ -8,15 +8,12 @@ import com.example.carrot_market.area.domain.model.Area;
 import com.example.carrot_market.area.domain.model.AreaRange;
 import com.example.carrot_market.core.error.CommonError;
 import com.example.carrot_market.product.domain.*;
-import com.example.carrot_market.product.dto.FetchProductResultDto;
-import com.example.carrot_market.product.dto.InsertLikeCountRequestDto;
+import com.example.carrot_market.product.dto.*;
 import com.example.carrot_market.product.domain.Product;
 import com.example.carrot_market.product.domain.ProductAggregate;
 import com.example.carrot_market.product.domain.ProductCategory;
 import com.example.carrot_market.product.domain.ProductImage;
 
-import com.example.carrot_market.product.dto.InsertProductRequestDto;
-import com.example.carrot_market.product.dto.UpdateProductRequestDto;
 import com.example.carrot_market.product.repository.ImageMapper;
 import com.example.carrot_market.product.repository.ProductMapper;
 import com.example.carrot_market.user.db.UserMapper;
@@ -31,7 +28,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -59,12 +55,13 @@ public class ProductServiceImpl implements ProductService {
             InsertProductRequestDto insertProductRequestDto,
             MultipartFile[] files
     ) {
-        Product product = makeProductByDto(insertProductRequestDto, 1);
+        Product product = insertProductRequestDto.toDomain(insertProductRequestDto, 1);
         productMapper.insertProduct(product);
         if (files == null) {
             return product;
+        } else {
+            return createProductWithImages(product, files);
         }
-        return createProductWithImages(product, files);
     }
 
     @Override
@@ -85,16 +82,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional
     @Override
-    public FetchProductResultDto fetchProducts(int category, int areaId, int limit, int lastProductId, AreaRange areaRange) {
-        List<ProductResponseDto> products = productMapper.findProductsByCategoryAndArea(
-                category,
-                areaId,
-                limit,
-                lastProductId,
-                areaRange.getDistance()
-        );
+    public FetchProductResult fetchProducts(int category, int areaId, int limit, int lastProductId, AreaRange areaRange) {
+        List<ProductResponseDto> products = productMapper.findProductsByCategoryAndArea(category, areaId, limit, lastProductId, areaRange.getDistance());
         if(products == null || products.isEmpty()) {
-            return FetchProductResultDto.builder()
+            return FetchProductResult.builder()
                     .lastId(0)
                     .result(List.of())
                     .build();
@@ -108,8 +99,7 @@ public class ProductServiceImpl implements ProductService {
                         0,
                         images.stream().filter(image -> image.getType_id() == product.getId()).toList()
                 )).toList();
-
-        return new FetchProductResultDto(productAggregateList, products.get(products.size() - 1).getId());
+        return new FetchProductResult(productAggregateList, products.getLast().getId());
     }
 
     // 사용자가 등록한 상품 조회
@@ -175,11 +165,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public void likeProductCancel(InsertLikeCountRequestDto req) {
         productMapper.deleteLikeCount(req);
         productMapper.updateLikeCountProductMinus(req.productId());
     }
-
 
     // 상품 조회수
     @Override
@@ -188,84 +178,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    @Transactional
     public void updateProductStatus(int id, int state) {
         productMapper.updateProductStatus(id, state);
-    }
-
-    private Product createProductWithImages(Product product, MultipartFile[] images) {
-//        List<CompletableFuture<Boolean>> uploadFutures = new ArrayList<>();
-        List<Boolean> uploadFutures = new ArrayList<>();
-        for (MultipartFile file : images) {
-            String imageFileName = makeProductImageName(file, product.getId());
-            ProductImage image = ProductImage.builder()
-                    .id(0)
-                    .type(1)
-                    .type_id(product.getId())
-                    .file_path(imageFileName)
-                    .build();
-            imageMapper.insertProductImage(image);
-//            CompletableFuture<Boolean> future = uploadFileToS3(file, imageFileName);
-            Boolean future = uploadFileToS3Sync(file, imageFileName);
-            uploadFutures.add(future);
-        }
-
-
-//        CompletableFuture<Void> allUploads = CompletableFuture.allOf(uploadFutures.toArray(new CompletableFuture[0]));
-//        allUploads.thenRunAsync(() -> {
-//            List<Boolean> results = uploadFutures.stream()
-//                    .map(CompletableFuture::join)
-//                    .toList();
-//            if (results.contains(false)) {
-//                productMapper.updateProductStatus(product.getId(), 5);
-//            } else {
-//                productMapper.updateProductStatus(product.getId(), 1);
-//            }
-//        });
-//
-        if(uploadFutures.contains(false)) {
-            throw new CommonError.Unexpected.ServerError("이미지 업로드에 실패하였습니다.");
-        }
-
-        return product;
-    }
-
-    private List<ProductImage> findImageByTypeAndTypeId(int type, int typeId) {
-        return imageMapper.findImageByTypeAndTypeId(type, typeId);
-    }
-
-    private static Product makeProductByDto(InsertProductRequestDto dto, int state) {
-        return Product.builder()
-                .id(0)
-                .sellerId(dto.userId())
-                .sellingAreaId(dto.areaId())
-                .categoryId(dto.categoryId())
-                .isNegotiation(dto.isNegotiation())
-                .state(state)
-                .title(dto.title())
-                .content(dto.content())
-                .price(dto.price())
-                .build();
-    }
-
-    private String makeProductImageName(MultipartFile file, int productId) {
-        return "product/" + productId + "/" + file.getOriginalFilename();
-    }
-
-    @Async
-    public CompletableFuture<Boolean> uploadFileToS3(MultipartFile file, String imageFileName) {
-        try {
-            ObjectMetadata metadata = new ObjectMetadata();
-            metadata.setContentLength(file.getSize());
-            metadata.setContentType(file.getContentType());
-            s3client.putObject(new PutObjectRequest("carrotmarket", imageFileName, file.getInputStream(), metadata));
-            return CompletableFuture.completedFuture(true);
-        } catch (IOException e) {
-            return CompletableFuture.completedFuture(false);
-        } catch (Exception e) {
-            System.err.println("Error uploading file to S3: " + e.getMessage());
-            return CompletableFuture.completedFuture(false);
-        }
     }
 
     @Override
@@ -292,18 +206,70 @@ public class ProductServiceImpl implements ProductService {
                 );
     }
 
-    public boolean uploadFileToS3Sync(MultipartFile file, String imageFileName) {
+    private Product createProductWithImages(Product product, MultipartFile[] images) {
+//        List<CompletableFuture<Boolean>> uploadFutures = new ArrayList<>();
+        for (MultipartFile file : images) {
+            String imageFileName = makeProductImageName(file, product.getId());
+            ProductImage image = ProductImage.builder()
+                    .id(0)
+                    .type(1)
+                    .type_id(product.getId())
+                    .file_path(imageFileName)
+                    .build();
+            imageMapper.insertProductImage(image);
+//            CompletableFuture<Boolean> future = uploadFileToS3(file, imageFileName);
+            uploadFileToS3Sync(file, imageFileName);
+        }
+
+        // 비동기 업로드 처리
+//        CompletableFuture<Void> allUploads = CompletableFuture.allOf(uploadFutures.toArray(new CompletableFuture[0]));
+//        allUploads.thenRunAsync(() -> {
+//            List<Boolean> results = uploadFutures.stream()
+//                    .map(CompletableFuture::join)
+//                    .toList();
+//            if (results.contains(false)) {
+//                productMapper.updateProductStatus(product.getId(), 5);
+//            } else {
+//                productMapper.updateProductStatus(product.getId(), 1);
+//            }
+//        });
+
+        return product;
+    }
+
+    private List<ProductImage> findImageByTypeAndTypeId(int type, int typeId) {
+        return imageMapper.findImageByTypeAndTypeId(type, typeId);
+    }
+
+    private String makeProductImageName(MultipartFile file, int productId) {
+        return "product/" + productId + "/" + file.getOriginalFilename();
+    }
+
+    @Async
+    private CompletableFuture<Boolean> uploadFileToS3(MultipartFile file, String imageFileName) {
         try {
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentLength(file.getSize());
             metadata.setContentType(file.getContentType());
             s3client.putObject(new PutObjectRequest("carrotmarket", imageFileName, file.getInputStream(), metadata));
-            return true;
+            return CompletableFuture.completedFuture(true);
         } catch (IOException e) {
-            return false;
+            return CompletableFuture.completedFuture(false);
         } catch (Exception e) {
             System.err.println("Error uploading file to S3: " + e.getMessage());
-            return false;
+            return CompletableFuture.completedFuture(false);
+        }
+    }
+
+    private void uploadFileToS3Sync(MultipartFile file, String imageFileName) {
+        try {
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentLength(file.getSize());
+            metadata.setContentType(file.getContentType());
+            s3client.putObject(new PutObjectRequest("carrotmarket", imageFileName, file.getInputStream(), metadata));
+        } catch (Exception e) {
+            log.error("S3 이미지 업로드 중 오류 발생");
+            throw new CommonError.Unexpected.ServerError("이미지 업로드에 실패하였습니다.");
         }
     }
 

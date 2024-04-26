@@ -1,9 +1,13 @@
 package com.example.carrot_market.user.dto.request;
 
+import com.example.carrot_market.user.domain.User;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
+
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Getter
 public class SignUpRequestDto {
@@ -16,5 +20,18 @@ public class SignUpRequestDto {
     private String profileImage;
     private int areaId;
     private int areaRange;
+
+    public User toDomain() {
+        LocalDateTime now = LocalDateTime.now();
+        Timestamp timestamp = Timestamp.valueOf(now);
+        return User.builder()
+                .id(0)
+                .userScore(36.5)
+                .phone(this.getPhone())
+                .createdAt(timestamp)
+                .nickname(this.getNickname())
+                .profileImage(this.getProfileImage())
+                .build();
+    }
 }
 

@@ -35,83 +35,36 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserAggregate signUp(SignUpRequestDto singUpRequestDto) {
-
-        userMapper.selectUserByPhone(singUpRequestDto.getPhone()).ifPresent(user1 -> {
-                    throw new CommonError.Expected.ResourceNotFoundException("이미 회원 가입이 되어있는 번호입니다.");
-                }
-        );
-
-        User user = makeUser(singUpRequestDto);
+        userMapper.selectUserByPhone(singUpRequestDto.getPhone()).ifPresent(user1 -> {throw new CommonError.Expected.ResourceNotFoundException("이미 회원 가입이 되어있는 번호입니다.");});
+        User user = singUpRequestDto.toDomain();
         userMapper.insertUser(user);
-
-        areaService.addAreaToUser(
-                singUpRequestDto.getAreaId(),
-                user.getId(),
-                singUpRequestDto.getAreaRange()
-        );
-
+        areaService.addAreaToUser(singUpRequestDto.getAreaId(), user.getId(), singUpRequestDto.getAreaRange());
         Area area = areaService.selectAreaById(singUpRequestDto.getAreaId());
-
-        UserArea userArea = getUserArea(user, area, singUpRequestDto);
-
+        UserArea userArea = new UserArea(user, area, singUpRequestDto.getAreaRange());
         return UserAggregate.builder()
                 .user(user)
                 .userArea(List.of(userArea))
                 .build();
     }
 
-    private UserArea getUserArea(User user, Area area, SignUpRequestDto singUpRequestDto) {
-        return UserArea.builder()
-                .userId(user.getId())
-                .areaId(singUpRequestDto.getAreaId())
-                .do_city(area.getDo_city())
-                .si_gu(area.getSi_gu())
-                .dong(area.getDong())
-                .eup(area.getEup())
-                .ri(area.getRi())
-                .latitude(area.getLatitude())
-                .longitude(area.getLongitude())
-                .isDefault(1)
-                .areaRange(singUpRequestDto.getAreaRange())
-                .build();
-    }
-
-    private static User makeUser(SignUpRequestDto singUpRequestDto) {
-        LocalDateTime now = LocalDateTime.now();
-        Timestamp timestamp = Timestamp.valueOf(now);
-        return User.builder()
-                .id(0)
-                .userScore(36.5)
-                .phone(singUpRequestDto.getPhone())
-                .createdAt(timestamp)
-                .nickname(singUpRequestDto.getNickname())
-                .profileImage(singUpRequestDto.getProfileImage())
-                .build();
-    }
 
     @Override
     public UserAggregate singIn(SignInResponseDto signInResponseDto) {
-
-        log.error("signInResponseDto : {}", signInResponseDto.getPhone());
-        User user = userMapper.selectUserByPhone(signInResponseDto.getPhone()).orElseThrow(() -> {
-            throw new CommonError.Expected.ResourceNotFoundException("회원정보가 존재하지 않습니다.");
-        });
-
-
+        User user = userMapper.selectUserByPhone(signInResponseDto.getPhone()).orElseThrow(() -> new CommonError.Expected.ResourceNotFoundException("회원정보가 존재하지 않습니다."));
         List<UserArea> areas = areaService.getAreaListByUserId(user.getId());
         return UserAggregate.builder()
                 .user(user)
                 .userArea(areas)
                 .build();
     }
+
     @Override
     public User updateUser(int id, UpdateUserRequestDto updateUserRequestDto){
-        Optional<User> user1 = userMapper.selectUserById(id);
-        if(user1.isEmpty()) throw new CommonError.Expected.ResourceNotFoundException("no exist user");
         User user = updateUserRequestDto.toEntity(id);
         userMapper.updateUser(user);
-        return user;
+        return userMapper.selectUserById(id).orElseThrow(() -> new CommonError.Expected.ResourceNotFoundException("찾는 유저가 없습니다."));
     }
+
     @Override
     public User getUser(String phone) {
         return userMapper.selectUserByPhone(phone).orElseThrow(() -> new CommonError.Expected.ResourceNotFoundException("찾는 유저가 없습니다."));
@@ -119,19 +72,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User unRegister(int id) {
-        LocalDateTime now = LocalDateTime.now();
-        Timestamp deletedAt = Timestamp.valueOf(now);
-        Optional<User> userById = userMapper.selectUserById(id);
-        if(userById.isEmpty()) throw new CommonError.Expected.ResourceNotFoundException("no exist user");
-        User user = User.builder()
-                .id(userById.get().getId())
-                .nickname(userById.get().getNickname())
-                .phone(userById.get().getPhone())
-                .createdAt(userById.get().getCreatedAt())
-                .userScore(userById.get().getUserScore())
-                .profileImage(userById.get().getProfileImage())
-                .deletedAt(deletedAt)
-                .build();
+        User user = userMapper.selectUserById(id).orElseThrow(() -> new CommonError.Expected.ResourceNotFoundException("찾는 유저가 없습니다."));
+        if(user.getDeletedAt() != null) throw new CommonError.Unexpected.IllegalArgumentException("이미 탈퇴한 유저입니다.");
+        user.setDeletedAt(Timestamp.valueOf(LocalDateTime.now()));
         userMapper.unRegister(user);
         return user;
     }

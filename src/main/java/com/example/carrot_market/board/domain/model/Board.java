@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.sql.Timestamp;
+
 @Getter
 @Builder
 @AllArgsConstructor
@@ -12,7 +14,7 @@ public class Board {
     private int id;
     private int userId;
     private int areaId;
-    private String createdAt;
+    private Timestamp createdAt;
     private String content;
     private int category;
     private String title;

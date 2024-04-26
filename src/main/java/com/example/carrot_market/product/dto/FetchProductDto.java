@@ -1,5 +1,7 @@
-package com.example.carrot_market.product.domain;
+package com.example.carrot_market.product.dto;
 
+import com.example.carrot_market.product.domain.ProductImage;
+import com.example.carrot_market.product.domain.ProductResponseDto;
 import lombok.Getter;
 
 import java.util.List;
