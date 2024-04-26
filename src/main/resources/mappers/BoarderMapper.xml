@@ -112,4 +112,11 @@
           JOIN boards b ON b.id = c.board_id
          WHERE b.id = #{boardId}
     </select>
+
+    <!-- 댓글 삭제 -->
+    <select id="deleteComment" parameterType="int" resultType="boolean">
+        DELETE
+        FROM comments
+        WHERE id = #{id}
+    </select>
 </mapper>
