@@ -86,6 +86,9 @@ public interface BoardService {
             AddCommentRequestDto addCommentRequestDto
     );
 
+    // 단일 댓글 조회
+    Comment selectCommentById(int id);
+
     /**
      * @param boardId, commentId, userId
      * @return void

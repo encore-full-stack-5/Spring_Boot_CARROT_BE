@@ -80,4 +80,12 @@ public class BoardController {
     ) {
         boardService.insertComment(addCommentRequestDto);
     }
+
+    // 단일 댓글 조회
+    @GetMapping("/comment/{id}")
+    public Comment selectCommentById(
+            @PathVariable("id") int id // commentId
+    ) {
+        return boardService.selectCommentById(id);
+    }
 }
