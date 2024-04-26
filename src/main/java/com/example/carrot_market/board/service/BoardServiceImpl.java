@@ -97,6 +97,11 @@ public class BoardServiceImpl implements BoardService {
         return boardMapper.selectCommentById(id);
     }
 
+    // 커뮤니티 내 댓글 조회
+    public List<Comment> getCommentsByBoardId(int boardId) {
+        return boardMapper.getCommentsByBoardId(boardId);
+    }
+
     @Override
     public void likeComment(int boardId, int commentId, int userId) {
 
