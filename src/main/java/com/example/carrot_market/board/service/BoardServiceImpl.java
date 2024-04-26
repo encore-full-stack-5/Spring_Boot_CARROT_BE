@@ -92,6 +92,11 @@ public class BoardServiceImpl implements BoardService {
         boardMapper.insertComment(addCommentRequestDto);
     }
 
+    // 단일 댓글 조회
+    public Comment selectCommentById(int id) {
+        return boardMapper.selectCommentById(id);
+    }
+
     @Override
     public void likeComment(int boardId, int commentId, int userId) {
 

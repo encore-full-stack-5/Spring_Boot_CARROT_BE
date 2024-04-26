@@ -37,4 +37,7 @@ public interface BoardMapper {
 
     // 댓글 작성
     void insertComment(AddCommentRequestDto addCommentRequestDto);
+
+    // 단일 댓글 조회
+    Comment selectCommentById(int id);
 }
