@@ -89,6 +89,9 @@ public interface BoardService {
     // 단일 댓글 조회
     Comment selectCommentById(int id);
 
+    // 커뮤니티 내 댓글 조회
+    List<Comment> getCommentsByBoardId(int boardId);
+
     /**
      * @param boardId, commentId, userId
      * @return void

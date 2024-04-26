@@ -75,10 +75,11 @@ public class BoardController {
 
     // 댓글 작성
     @PostMapping("/comment")
-    public void insertComment(
+    public ResponseEntity<BaseResponseEntity<?>> insertComment(
             @RequestBody AddCommentRequestDto addCommentRequestDto
     ) {
         boardService.insertComment(addCommentRequestDto);
+        return BaseResponseEntity.ok("success");
     }
 
     // 단일 댓글 조회
@@ -87,5 +88,13 @@ public class BoardController {
             @PathVariable("id") int id // commentId
     ) {
         return boardService.selectCommentById(id);
+    }
+
+    // 커뮤니티 내 댓글 조회
+    @GetMapping("/board/comments/{id}")
+    public List<Comment> getCommentsByBoardId(
+            @PathVariable("id") int boardId
+    ) {
+        return boardService.getCommentsByBoardId(boardId);
     }
 }
