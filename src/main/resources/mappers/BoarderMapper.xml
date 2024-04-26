@@ -80,6 +80,12 @@
           FROM boards
          WHERE id = #{id}
     </select>
+    <!-- 선택한 커뮤니티의 댓글도 함께 삭제 -->
+    <select id="deleteBoardWithComment" parameterType="int" resultType="boolean">
+        DELETE
+          FROM comments
+         WHERE board_id = #{id}
+    </select>
 
     <!-- 댓글 작성 -->
     <insert id="insertComment">

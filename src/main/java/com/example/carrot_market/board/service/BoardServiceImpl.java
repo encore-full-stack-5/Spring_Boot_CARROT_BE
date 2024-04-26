@@ -74,10 +74,11 @@ public class BoardServiceImpl implements BoardService {
     public boolean increaseBoardViewCount(int boardId) {
         Optional<Board> boardById = boardMapper.selectBoardById(boardId);
         if(boardById.isEmpty()) throw new CommonError.Expected.ResourceNotFoundException("no exist board");
-        
+
         return boardMapper.increaseBoardViewCount(boardId);
     }
 
+    // 커뮤니티 좋아요
     @Override
     public void likeBoard(int boardId) {
 
@@ -91,6 +92,10 @@ public class BoardServiceImpl implements BoardService {
     // 선택한 커뮤니티 삭제
     @Override
     public void deleteBoard(int id) {
+        Optional<Board> boardById = boardMapper.selectBoardById(id);
+        if(boardById.isEmpty()) throw new CommonError.Expected.ResourceNotFoundException("no exist board");
+
+        boardMapper.deleteBoardWithComment(id);
         boardMapper.deleteBoard(id);
     }
 
