@@ -6,7 +6,6 @@ import com.example.carrot_market.board.domain.model.Comment;
 import com.example.carrot_market.board.dto.*;
 import com.example.carrot_market.core.error.CommonError;
 import com.example.carrot_market.user.db.UserMapper;
-import com.example.carrot_market.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -106,7 +105,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     // 단일 댓글 조회
-    public Comment selectCommentById(int id) {
+    public Optional<Comment> selectCommentById(int id) {
         return boardMapper.selectCommentById(id);
     }
 
@@ -126,8 +125,11 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public Comment deleteComment(int boardId, int commentId, int userId) {
-        return null;
+    public void deleteComment(int id) {
+        Optional<Comment> commentById = boardMapper.selectCommentById(id);
+        if(commentById.isEmpty()) throw new CommonError.Expected.ResourceNotFoundException("no exist comment");
+
+        boardMapper.deleteComment(id);
     }
 
     @Override

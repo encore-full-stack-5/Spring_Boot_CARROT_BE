@@ -5,6 +5,7 @@ import com.example.carrot_market.board.domain.model.Comment;
 import com.example.carrot_market.board.dto.*;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BoardService {
 
@@ -87,7 +88,7 @@ public interface BoardService {
     );
 
     // 단일 댓글 조회
-    Comment selectCommentById(int id);
+    Optional<Comment> selectCommentById(int id);
 
     // 커뮤니티 내 댓글 조회
     List<Comment> getCommentsByBoardId(int boardId);
@@ -102,12 +103,12 @@ public interface BoardService {
     void unLikeComment(int boardId, int commentId, int userId);
 
     /**
-     * @param boardId, commentId, userId
+     * @param id
      * @return Comment
      *
      * 커뮤니티 글 > 댓글을 삭제한다.
      */
-    Comment deleteComment(int boardId, int commentId, int userId);
+    void deleteComment(int id);
 
     /**
      * @param addNestedCommentRequestDto, boardId, commentId, userId
