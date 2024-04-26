@@ -106,7 +106,7 @@ public class BoardController {
     ) {
         return boardService.getCommentsByBoardId(boardId);
     }
-
+  
     // 댓글 삭제
     @DeleteMapping("/comment/{id}")
     public ResponseEntity<BaseResponseEntity<?>> deleteComment(
