@@ -34,7 +34,7 @@ public interface BoardMapper {
 
     // 선택한 커뮤니티 삭제
     void deleteBoard(int id);
-
+  
     // 댓글 작성
     void insertComment(AddCommentRequestDto addCommentRequestDto);
 

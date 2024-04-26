@@ -72,7 +72,7 @@ public class BoardController {
 
         return BaseResponseEntity.ok("success");
     }
-
+  
     // 댓글 작성
     @PostMapping("/comment")
     public ResponseEntity<BaseResponseEntity<?>> insertComment(
